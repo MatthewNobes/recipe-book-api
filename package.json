@@ -1,0 +1,34 @@
+{
+  "name": "recipe-book-api",
+  "version": "0.0.1",
+  "description": "the api for the recipe book system",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "nodemon server.mjs --watch server/*",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthewNobes/recipe-book-api.git"
+  },
+  "keywords": [
+    "api",
+    "recipe"
+  ],
+  "author": "Matthew Nobes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatthewNobes/recipe-book-api/issues"
+  },
+  "homepage": "https://github.com/MatthewNobes/recipe-book-api#readme",
+  "dependencies": {
+    "@prisma/client": "^4.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "prisma": "^4.4.0",
+    "supertest": "^6.2.4"
+  }
+}

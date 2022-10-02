@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:recipe-book.db"
+}
+
+model favourites {
+  favID    Int    @id @default(autoincrement())
+  userID   Int
+  recipeID Int
+  recipe   recipe @relation(fields: [recipeID], references: [recipeID], onDelete: Cascade)
+  users    users  @relation(fields: [userID], references: [userID], onDelete: Cascade)
+}
+
+model ingredientMeasurement {
+  ingredientMeasurementID                                Int                 @id @default(autoincrement())
+  ingredientID                                           Int?
+  measurementSize                                        Decimal
+  measurementType                                        Int?
+  measurementType_ingredientMeasurementTomeasurementType measurementType?    @relation(fields: [measurementType], references: [measurementTypeID], onDelete: Cascade)
+  ingredients                                            ingredients?        @relation(fields: [ingredientID], references: [ingredientID], onDelete: Cascade)
+  recipeIngredients                                      recipeIngredients[]
+}
+
+model ingredients {
+  ingredientID          Int                     @id @default(autoincrement())
+  ingredientName        String?
+  ingredientDescription String?
+  ingredientInfoURL     String?
+  ingredientMeasurement ingredientMeasurement[]
+}
+
+model measurementType {
+  measurementTypeID     Int                     @id @default(autoincrement())
+  measurementType       String?
+  ingredientMeasurement ingredientMeasurement[]
+}
+
+model recipe {
+  recipeID               Int                 @id @default(autoincrement())
+  recipeName             String
+  recipeDecsription      String
+  recipeDifficultyRating Int?
+  recipePrepTime         Int
+  recipeCookTime         Int
+  servingNumber          Int
+  recipeSource           String?
+  recipeCountryID        Int?
+  recipeCatagory         Int?
+  recipeRegionID         Int?
+  regions                regions?            @relation(fields: [recipeRegionID], references: [regionID], onDelete: Cascade)
+  catagories             catagories?         @relation(fields: [recipeCatagory], references: [catagoryID], onDelete: Cascade)
+  countries              countries?          @relation(fields: [recipeCountryID], references: [countryID], onDelete: Cascade)
+  favourites             favourites[]
+  recipeIngredients      recipeIngredients[]
+  recipeSteps            recipeSteps[]
+}
+
+model recipeIngredients {
+  recipeIngredientID      Int                   @id @default(autoincrement())
+  recipeID                Int
+  ingredientMeasurementID Int
+  ingredientMeasurement   ingredientMeasurement @relation(fields: [ingredientMeasurementID], references: [ingredientMeasurementID], onDelete: Cascade)
+  recipe                  recipe                @relation(fields: [recipeID], references: [recipeID], onDelete: Cascade)
+}
+
+model recipeSteps {
+  recipeStepID Int     @id @default(autoincrement())
+  stepNumber   Int
+  stepText     String
+  recipeID     Int?
+  recipe       recipe? @relation(fields: [recipeID], references: [recipeID], onDelete: Cascade)
+}
+
+model userPasswords {
+  passwordID   Int    @id @default(autoincrement())
+  userID       Int
+  passwordHash String
+  users        users  @relation(fields: [userID], references: [userID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  userID        Int             @id @unique(map: "sqlite_autoindex_users_1") @default(autoincrement())
+  username      String
+  firstName     String?
+  lastName      String?
+  email         String
+  favourites    favourites[]
+  userPasswords userPasswords[]
+}
+
+model catagories {
+  catagoryID Int      @id @unique(map: "sqlite_autoindex_catagories_1") @default(autoincrement())
+  catagory   String
+  recipe     recipe[]
+}
+
+model countries {
+  countryID Int      @id @unique(map: "sqlite_autoindex_countries_1") @default(autoincrement())
+  country   String
+  recipe    recipe[]
+}
+
+model regions {
+  regionID Int      @id @unique(map: "sqlite_autoindex_regions_1") @default(autoincrement())
+  region   String   @unique(map: "sqlite_autoindex_regions_2")
+  recipe   recipe[]
+}
