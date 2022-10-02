@@ -1,4 +1,4 @@
-import router from "./routes/index.mjs";
+import router from "./routes/index";
 import express from "express";
 import cors from "cors";
 

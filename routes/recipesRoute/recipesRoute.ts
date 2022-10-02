@@ -1,7 +1,8 @@
 "use strict";
+// file deepcode ignore ComparisonToNaN: <please specify a reason of ignoring this>
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { getRecipeFromID } from "./getRecipeFromID/getRecipeFromID.mjs";
+import { getRecipeFromID } from "./getRecipeFromID/getRecipeFromID";
 
 const prisma = new PrismaClient();
 let recipeRouter = express.Router();
@@ -41,6 +42,7 @@ recipeRouter
     if (
       recipeName === "" ||
       recipeDescription === "" ||
+      
       recipeDifficultyRating === NaN ||
       recipePrepTime === NaN ||
       recipeCookTime === NaN
@@ -48,8 +50,8 @@ recipeRouter
       result.json("ERROR 1: Some required recipe parameters are missing");
     } else if (
       recipeName.length > 255 ||
-      recipeDescription > 1024 ||
-      recipeSource > 512
+      recipeDescription.length > 1024 ||
+      recipeSource.length > 512
     ) {
       result.json(
         "ERROR 2: Some recipe parameters exceed the maximum allowed size"

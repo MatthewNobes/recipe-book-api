@@ -1,6 +1,6 @@
-import recipesRouter from "./recipesRoute/recipesRoute.mjs";
-import ingredientsRouter from "./ingredientsRoute/ingredientsRoute.mjs";
-import measurementsRouter from "./measurementsRoute/measurementsRoute.mjs";
+import recipesRouter from "./recipesRoute/recipesRoute";
+import ingredientsRouter from "./ingredientsRoute/ingredientsRoute";
+import measurementsRouter from "./measurementsRoute/measurementsRoute";
 import express from "express";
 let router = express.Router();
 
