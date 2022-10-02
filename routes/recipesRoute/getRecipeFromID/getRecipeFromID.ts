@@ -6,6 +6,12 @@ const prisma = new PrismaClient();
 interface recipeObject {
   recipeID: any;
   recipeName: any;
+  recipeDecsription: any;
+  recipePrepTime: any;
+  recipeCookTime: any;
+  servingNumber: any;
+  recipeDifficultyRating?: any;
+  recipeSource?: any;
   ingredients?: any;
 }
 
