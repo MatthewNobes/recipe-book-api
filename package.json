@@ -5,6 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "ts-node-dev --poll ./index.ts",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "test": "jest --watch"
   },
   "repository": {
