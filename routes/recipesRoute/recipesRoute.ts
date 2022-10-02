@@ -1,5 +1,5 @@
 "use strict";
-// file deepcode ignore ComparisonToNaN: <please specify a reason of ignoring this>
+// file deepcode ignore ComparisonToNaN: its fucking annoying
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { getRecipeFromID } from "./getRecipeFromID/getRecipeFromID";
@@ -17,7 +17,12 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
 
   try {
     const recipe = await getRecipeFromID(requestedRecipeID);
-    result.json(recipe);
+
+    if (recipe) {
+      result.json(recipe);
+    } else {
+      throw "recipe not found";
+    }
   } catch (error) {
     console.log(error);
     result.sendStatus(400);
@@ -42,7 +47,6 @@ recipeRouter
     if (
       recipeName === "" ||
       recipeDescription === "" ||
-      
       recipeDifficultyRating === NaN ||
       recipePrepTime === NaN ||
       recipeCookTime === NaN
