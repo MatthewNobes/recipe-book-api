@@ -4,8 +4,9 @@ import { getRecipeIngredientsFromID } from "./getRecipeIngredientsFromID/getReci
 const prisma = new PrismaClient();
 
 interface recipeObject {
-  recipeID?: any;
-  ingredients?: any; // 👈️ mark as optional so you can add later
+  recipeID: any;
+  recipeName: any;
+  ingredients?: any;
 }
 
 export const getRecipeFromID = async (requestedRecipeID: number) => {
