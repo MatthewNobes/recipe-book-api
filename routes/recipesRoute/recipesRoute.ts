@@ -7,6 +7,13 @@ import { getRecipeFromID } from "./getRecipeFromID/getRecipeFromID";
 const prisma = new PrismaClient();
 let recipeRouter = express.Router();
 
+/**
+ * @swagger
+ * /api/recipes/allRecipes:
+ *   get:
+ *     summary: Retrieve all the recipes
+ *     description: Retrieve all the recipes in the system
+ */
 recipeRouter.route("/allRecipes").get(async (request, result) => {
   const allRecipes = await prisma.recipe.findMany();
   result.json(allRecipes);

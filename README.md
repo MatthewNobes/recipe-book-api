@@ -2,6 +2,14 @@
 
 The api middleware for the recipe book app I have been developing. {complete later}
 
+## Documentation (Swagger)
+
+This API has been designed to conform with the OpenAPI 3.0 standard. The swagger documentation page of the available routes for this API can be found at the following route:
+
+```
+http://localhost:4444/swagger/
+```
+
 ## Development
 
 do later
