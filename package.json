@@ -1,6 +1,6 @@
 {
   "name": "recipe-book-api",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The api for the recipe book system",
   "main": "index.ts",
   "scripts": {
