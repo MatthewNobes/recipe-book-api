@@ -7,7 +7,9 @@
     "start": "ts-node-dev --poll ./index.ts",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "prisma-pull": "prisma db pull",
+    "prisma-generate": "prisma generate"
   },
   "repository": {
     "type": "git",

@@ -12,7 +12,35 @@ http://localhost:4444/swagger/
 
 ## Development
 
-do later
+To get started with this API, the first step is to install all the required NPM packages. This can be done by using either of the two NPM install commands:
+
+```
+npm i
+npm install
+```
+
+NOTE: This requires node and npm to be installed. A Long Term Support (LTS) version is recommend
+
+The next stage is to set up your database. Eventually a DB setup SQL script will be provided. In a .env file placed at the root of the application, set the database connection string in a variable called DATABASE_URL. This is done in the standard JDBC standard. Below shows the structure and an example. It requies the following parameters:
+
+- Server hostname or IP
+- Server port
+- Database name
+- Username
+- Password
+
+```
+DATABASE_URL="sqlserver://<server-ip-address>:<port>;database=<database-name>;user=<username>;password=<password>;encrypt=true;TrustServerCertificate=true;"
+
+Example: DATABASE_URL="sqlserver://192.168.1.1:1433;database=Recipe Book;user=sa;password=password;encrypt=true;TrustServerCertificate=true;"
+```
+
+To ensure the database can be accessed using prisma run the first command below to update the prisma schema, the second command allows this updated schema to be provided by prisma client. If you make any changes to the database, you will need to run both of these commands again.
+
+```
+npm run prisma-pull
+npm run prisma-generate
+```
 
 ### Testing
 
