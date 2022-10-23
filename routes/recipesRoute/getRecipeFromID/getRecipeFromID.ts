@@ -4,29 +4,29 @@ import { getRecipeIngredientsFromID } from "./getRecipeIngredientsFromID/getReci
 const prisma = new PrismaClient();
 
 interface recipeObject {
-  recipeID: any;
-  recipeName: any;
-  recipeDecsription: any;
-  recipePrepTime: any;
-  recipeCookTime: any;
-  servingNumber: any;
-  recipeDifficultyRating?: any;
-  recipeSource?: any;
-  ingredients?: any;
+  RecipeID: any;
+  RecipeName: any;
+  RecipeDecsription: any;
+  RecipePrepTime: any;
+  RecipeCookTime: any;
+  ServingNumber: any;
+  RecipeDifficultyRating?: any;
+  RecipeSource?: any;
+  Ingredients?: any;
 }
 
 export const getRecipeFromID = async (requestedRecipeID: number) => {
-  const recipe = await prisma.recipe.findFirst({
-    where: { recipeID: requestedRecipeID },
+  const recipe = await prisma.recipes.findFirst({
+    where: { RecipeID: requestedRecipeID },
   });
 
   if (recipe) {
     const recipeObj: recipeObject = recipe;
     const recipeIngredientsArray = await getRecipeIngredientsFromID(
-      recipeObj.recipeID
+      recipeObj.RecipeID
     );
 
-    recipeObj.ingredients = recipeIngredientsArray;
+    recipeObj.Ingredients = recipeIngredientsArray;
     return recipeObj;
   }
 

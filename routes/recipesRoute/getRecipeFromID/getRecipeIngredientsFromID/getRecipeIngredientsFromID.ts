@@ -21,14 +21,14 @@ export const getRecipeIngredientsFromID = async (requestedRecipeID: any) => {
 export const getIngredientMeasurement = async (
   recipeIngredientMeasurementID: any
 ) => {
-  const ingredientMeasurement = await prisma.ingredientMeasurement.findFirst({
+  const ingredientMeasurement = await prisma.ingredientMeasurements.findFirst({
     where: { ingredientMeasurementID: recipeIngredientMeasurementID },
   });
 
   if (ingredientMeasurement) {
     const ingredientMeasurementType =
       await getMeasurementTypeFromMeasurementTypeID(
-        ingredientMeasurement.measurementType
+        ingredientMeasurement.measurementTypeID
       );
 
     const ingredient = await getIngredientFromIngredientID(

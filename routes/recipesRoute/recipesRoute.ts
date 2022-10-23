@@ -15,7 +15,7 @@ let recipeRouter = express.Router();
  *     description: Retrieve all the recipes in the system
  */
 recipeRouter.route("/allRecipes").get(async (request, result) => {
-  const allRecipes = await prisma.recipe.findMany();
+  const allRecipes = await prisma.recipes.findMany();
   result.json(allRecipes);
 });
 
@@ -46,8 +46,8 @@ recipeRouter
     const recipeDifficultyRating = parseInt(
       request.params.recipeDifficultyRating
     );
-    const recipePrepTime = parseInt(request.params.recipePrepTime);
-    const recipeCookTime = parseInt(request.params.recipeCookTime);
+    const recipePrepTime = request.params.recipePrepTime;
+    const recipeCookTime = request.params.recipeCookTime;
     const servingNumber = parseInt(request.params.servingNumber);
     const recipeSource = request.params.recipeSource;
 
@@ -55,8 +55,8 @@ recipeRouter
       recipeName === "" ||
       recipeDescription === "" ||
       recipeDifficultyRating === NaN ||
-      recipePrepTime === NaN ||
-      recipeCookTime === NaN
+      recipePrepTime === "" ||
+      recipeCookTime === ""
     ) {
       result.json("ERROR 1: Some required recipe parameters are missing");
     } else if (
@@ -68,15 +68,15 @@ recipeRouter
         "ERROR 2: Some recipe parameters exceed the maximum allowed size"
       );
     } else {
-      const newRecipe = await prisma.recipe.create({
+      const newRecipe = await prisma.recipes.create({
         data: {
-          recipeName: recipeName,
-          recipeDecsription: recipeDescription,
-          recipeDifficultyRating: recipeDifficultyRating,
-          recipePrepTime: recipePrepTime,
-          recipeCookTime: recipeCookTime,
-          servingNumber: servingNumber,
-          recipeSource: recipeSource,
+          RecipeName: recipeName,
+          RecipeDecsription: recipeDescription,
+          RecipeDifficultyRating: recipeDifficultyRating,
+          RecipePrepTime: recipePrepTime,
+          RecipeCookTime: recipeCookTime,
+          ServingNumber: servingNumber,
+          RecipeSource: recipeSource,
         },
       });
       result.json(newRecipe);

@@ -3,109 +3,85 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:recipe-book.db"
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
 }
 
-model favourites {
-  favID    Int    @id @default(autoincrement())
-  userID   Int
-  recipeID Int
-  recipe   recipe @relation(fields: [recipeID], references: [recipeID], onDelete: Cascade)
-  users    users  @relation(fields: [userID], references: [userID], onDelete: Cascade)
+model Catagories {
+  catagoryID Int       @id(map: "PK__Catagori__0F3282E157F6BED6") @default(autoincrement())
+  catagory   String    @db.VarChar(255)
+  Recipes    Recipes[]
 }
 
-model ingredientMeasurement {
-  ingredientMeasurementID                                Int                 @id @default(autoincrement())
-  ingredientID                                           Int?
-  measurementSize                                        Decimal
-  measurementType                                        Int?
-  measurementType_ingredientMeasurementTomeasurementType measurementType?    @relation(fields: [measurementType], references: [measurementTypeID], onDelete: Cascade)
-  ingredients                                            ingredients?        @relation(fields: [ingredientID], references: [ingredientID], onDelete: Cascade)
-  recipeIngredients                                      recipeIngredients[]
+model Countries {
+  countryID Int       @id(map: "PK__Countrie__D320769C5C5C23DB") @default(autoincrement())
+  country   String    @db.VarChar(255)
+  Recipes   Recipes[]
 }
 
-model ingredients {
-  ingredientID          Int                     @id @default(autoincrement())
-  ingredientName        String?
-  ingredientDescription String?
-  ingredientInfoURL     String?
-  ingredientMeasurement ingredientMeasurement[]
+model ingredientMeasurements {
+  ingredientMeasurementID Int                 @id(map: "PK__ingredie__4A094F909F69D227") @default(autoincrement())
+  ingredientName          String              @db.VarChar(255)
+  measurementSize         String              @db.VarChar(255)
+  measurementTypeID       Int
+  ingredientID            Int
+  Ingredients             Ingredients         @relation(fields: [ingredientID], references: [ingredientID], onUpdate: NoAction, map: "FK__ingredien__ingre__45F365D3")
+  measurementType         measurementType     @relation(fields: [measurementTypeID], references: [measurementTypeID], onUpdate: NoAction, map: "FK__ingredien__measu__44FF419A")
+  RecipeIngredients       RecipeIngredients[]
+}
+
+model Ingredients {
+  ingredientID           Int                      @id(map: "PK__Ingredie__2753A6C7DB56B5D7") @default(autoincrement())
+  ingredientName         String                   @db.VarChar(255)
+  ingredientDescription  String?                  @db.VarChar(255)
+  ingredientInfoURL      String?                  @db.VarChar(255)
+  ingredientMeasurements ingredientMeasurements[]
 }
 
 model measurementType {
-  measurementTypeID     Int                     @id @default(autoincrement())
-  measurementType       String?
-  ingredientMeasurement ingredientMeasurement[]
+  measurementTypeID      Int                      @id(map: "PK__measurem__8AF905ACB3CD8ED0") @default(autoincrement())
+  measurementType        String                   @db.VarChar(255)
+  ingredientMeasurements ingredientMeasurements[]
 }
 
-model recipe {
-  recipeID               Int                 @id @default(autoincrement())
-  recipeName             String
-  recipeDecsription      String
-  recipeDifficultyRating Int?
-  recipePrepTime         Int
-  recipeCookTime         Int
-  servingNumber          Int
-  recipeSource           String?
-  recipeCountryID        Int?
-  recipeCatagory         Int?
-  recipeRegionID         Int?
-  regions                regions?            @relation(fields: [recipeRegionID], references: [regionID], onDelete: Cascade)
-  catagories             catagories?         @relation(fields: [recipeCatagory], references: [catagoryID], onDelete: Cascade)
-  countries              countries?          @relation(fields: [recipeCountryID], references: [countryID], onDelete: Cascade)
-  favourites             favourites[]
-  recipeIngredients      recipeIngredients[]
-  recipeSteps            recipeSteps[]
-}
-
-model recipeIngredients {
-  recipeIngredientID      Int                   @id @default(autoincrement())
+model RecipeIngredients {
+  recipeIngredientsID     Int                    @id(map: "PK__RecipeIn__316CB41259A9A915") @default(autoincrement())
   recipeID                Int
   ingredientMeasurementID Int
-  ingredientMeasurement   ingredientMeasurement @relation(fields: [ingredientMeasurementID], references: [ingredientMeasurementID], onDelete: Cascade)
-  recipe                  recipe                @relation(fields: [recipeID], references: [recipeID], onDelete: Cascade)
+  ingredientMeasurements  ingredientMeasurements @relation(fields: [ingredientMeasurementID], references: [ingredientMeasurementID], onUpdate: NoAction, map: "FK__RecipeIng__ingre__4E88ABD4")
+  Recipes                 Recipes                @relation(fields: [recipeID], references: [RecipeID], onUpdate: NoAction, map: "FK__RecipeIng__recip__4D94879B")
 }
 
-model recipeSteps {
-  recipeStepID Int     @id @default(autoincrement())
+model Recipes {
+  RecipeID               Int                 @id(map: "PK__Recipes__FDD988D003487EF5") @default(autoincrement())
+  RecipeName             String              @db.VarChar(255)
+  RecipeDecsription      String              @db.VarChar(255)
+  RecipeDifficultyRating Int?
+  RecipePrepTime         String?             @db.VarChar(255)
+  RecipeCookTime         String?             @db.VarChar(255)
+  ServingNumber          Int
+  RecipeSource           String?             @db.VarChar(255)
+  catagoryID             Int?
+  countryID              Int?
+  regionID               Int?
+  defectID               Int?
+  Catagories             Catagories?         @relation(fields: [catagoryID], references: [catagoryID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__catagor__5AEE82B9")
+  Countries              Countries?          @relation(fields: [countryID], references: [countryID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__country__5DCAEF64")
+  Regions                Regions?            @relation(fields: [regionID], references: [regionID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__regionI__60A75C0F")
+  RecipeIngredients      RecipeIngredients[]
+  RecipeSteps            RecipeSteps[]
+}
+
+model RecipeSteps {
+  recipeStepID Int     @id(map: "PK__RecipeSt__86116B1A5B4243C1") @default(autoincrement())
   stepNumber   Int
-  stepText     String
-  recipeID     Int?
-  recipe       recipe? @relation(fields: [recipeID], references: [recipeID], onDelete: Cascade)
+  stepText     String  @db.VarChar(2048)
+  recipeID     Int
+  Recipes      Recipes @relation(fields: [recipeID], references: [RecipeID], onUpdate: NoAction, map: "FK__RecipeSte__recip__534D60F1")
 }
 
-model userPasswords {
-  passwordID   Int    @id @default(autoincrement())
-  userID       Int
-  passwordHash String
-  users        users  @relation(fields: [userID], references: [userID], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model users {
-  userID        Int             @id @unique(map: "sqlite_autoindex_users_1") @default(autoincrement())
-  username      String
-  firstName     String?
-  lastName      String?
-  email         String
-  favourites    favourites[]
-  userPasswords userPasswords[]
-}
-
-model catagories {
-  catagoryID Int      @id @unique(map: "sqlite_autoindex_catagories_1") @default(autoincrement())
-  catagory   String
-  recipe     recipe[]
-}
-
-model countries {
-  countryID Int      @id @unique(map: "sqlite_autoindex_countries_1") @default(autoincrement())
-  country   String
-  recipe    recipe[]
-}
-
-model regions {
-  regionID Int      @id @unique(map: "sqlite_autoindex_regions_1") @default(autoincrement())
-  region   String   @unique(map: "sqlite_autoindex_regions_2")
-  recipe   recipe[]
+model Regions {
+  regionID Int       @id(map: "PK__Regions__15EA9088FCF77BF3") @default(autoincrement())
+  region   String    @db.VarChar(255)
+  Recipes  Recipes[]
 }
