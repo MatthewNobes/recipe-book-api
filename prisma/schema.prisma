@@ -21,7 +21,6 @@ model Countries {
 
 model ingredientMeasurements {
   ingredientMeasurementID Int                 @id(map: "PK__ingredie__4A094F909F69D227") @default(autoincrement())
-  ingredientName          String              @db.VarChar(255)
   measurementSize         String              @db.VarChar(255)
   measurementTypeID       Int
   ingredientID            Int
@@ -64,7 +63,6 @@ model Recipes {
   catagoryID             Int?
   countryID              Int?
   regionID               Int?
-  defectID               Int?
   Catagories             Catagories?         @relation(fields: [catagoryID], references: [catagoryID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__catagor__5AEE82B9")
   Countries              Countries?          @relation(fields: [countryID], references: [countryID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__country__5DCAEF64")
   Regions                Regions?            @relation(fields: [regionID], references: [regionID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__regionI__60A75C0F")
