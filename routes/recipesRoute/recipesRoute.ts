@@ -184,9 +184,6 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
   }
 });
 
-// http://localhost:4444/api/recipes/add-recipe/Chicken%20Curry-A%20nice%20simple%20chicken%20curry-5-40-140-2-source
-// http://localhost:4444/api/recipes/add-recipe/lamb%20vindaloo-A%20spicy%20lamb%20curry-7-0%3A30-1%3A00-6-A%20book
-
 /**
  * @swagger
  * /api/recipes/add-recipe/{recipeName}-{recipeDescription}-{recipeDifficultyRating}-{recipePrepTime}-{recipeCookTime}-{servingNumber}-{recipeSource}:
