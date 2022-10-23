@@ -16,7 +16,11 @@ do later
 
 ### Testing
 
-do later
+This API has been designed using Test Driven Development (TDD). Therefore, Jest test coverage is high allowing for alteration tracking to be done using the testing suite. An NPM command has been setup for this:
+
+```
+npm test
+```
 
 ## Deployment
 
