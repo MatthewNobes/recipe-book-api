@@ -6,6 +6,6 @@ let router = express.Router();
 
 router.use("/recipes", recipesRouter);
 router.use("/ingredients", ingredientsRouter);
-router.use("/measurements", measurementsRouter);
+router.use("/measurementTypes", measurementsRouter);
 
 export default router;

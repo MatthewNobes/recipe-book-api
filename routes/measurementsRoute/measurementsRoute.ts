@@ -7,7 +7,7 @@ let router = express.Router();
 
 /**
  * @swagger
- * /api/measurementTypes:
+ * /api/measurementTypes/measurementTypes:
  *   get:
  *     summary: Retrieve all the measurement types
  *     description: Retrieve all the measurement types in the system. E.g. Teaspoon, Grams, etc.
