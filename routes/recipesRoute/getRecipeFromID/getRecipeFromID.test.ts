@@ -6,15 +6,15 @@ describe("getRecipeFromID", () => {
 
     if (recipe) {
       expect(typeof recipe).toBe("object");
-      expect(recipe.recipeID).toBeDefined();
-      expect(recipe.recipeName).toBeDefined();
-      expect(recipe.recipeDecsription).toBeDefined();
-      // expect(recipe.recipeDifficultyRating).toBeDefined();
-      expect(recipe.recipePrepTime).toBeDefined();
-      expect(recipe.recipeCookTime).toBeDefined();
-      expect(recipe.servingNumber).toBeDefined();
-      // expect(recipe.recipeSource).toBeDefined();
-      expect(Array.isArray(recipe.ingredients)).toBe(true);
+      expect(recipe.RecipeID).toBeDefined();
+      expect(recipe.RecipeName).toBeDefined();
+      expect(recipe.RecipeDecsription).toBeDefined();
+      // expect(recipe.RecipeDifficultyRating).toBeDefined();
+      expect(recipe.RecipePrepTime).toBeDefined();
+      expect(recipe.RecipeCookTime).toBeDefined();
+      expect(recipe.ServingNumber).toBeDefined();
+      // expect(recipe.RecipeSource).toBeDefined();
+      expect(Array.isArray(recipe.Ingredients)).toBe(true);
     }
   });
 });

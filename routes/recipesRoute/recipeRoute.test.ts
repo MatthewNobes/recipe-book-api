@@ -8,13 +8,13 @@ describe("GET /allRecipes", () => {
 
       expect(response.statusCode).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
-      expect(response.body[0].recipeID).toBeDefined();
-      expect(response.body[0].recipeName).toBeDefined();
-      expect(response.body[0].recipeDecsription).toBeDefined();
+      expect(response.body[0].RecipeID).toBeDefined();
+      expect(response.body[0].RecipeName).toBeDefined();
+      expect(response.body[0].RecipeDecsription).toBeDefined();
       // expect(response.body[0].recipeDifficultyRating).toBeDefined();
-      expect(response.body[0].recipePrepTime).toBeDefined();
-      expect(response.body[0].recipeCookTime).toBeDefined();
-      expect(response.body[0].servingNumber).toBeDefined();
+      expect(response.body[0].RecipePrepTime).toBeDefined();
+      expect(response.body[0].RecipeCookTime).toBeDefined();
+      expect(response.body[0].ServingNumber).toBeDefined();
       // expect(response.body[0].recipeSource).toBeDefined();
     });
   });
@@ -31,15 +31,14 @@ describe("GET /recipe/:recipeID", () => {
       expect(response.statusCode).toBe(200);
       expect(typeof response.body).toBe("object");
 
-      expect(response.body.recipeID).toBeDefined();
-      expect(response.body.recipeName).toBeDefined();
-      expect(response.body.recipeDecsription).toBeDefined();
+      expect(response.body.RecipeID).toBeDefined();
+      expect(response.body.RecipeName).toBeDefined();
+      expect(response.body.RecipeDecsription).toBeDefined();
       // expect(response.body.recipeDifficultyRating).toBeDefined();
-      expect(response.body.recipePrepTime).toBeDefined();
-      expect(response.body.recipeCookTime).toBeDefined();
-      expect(response.body.servingNumber).toBeDefined();
+      expect(response.body.RecipePrepTime).toBeDefined();
+      expect(response.body.RecipeCookTime).toBeDefined();
+      expect(response.body.ServingNumber).toBeDefined();
       // expect(response.body.recipeSource).toBeDefined();
-      expect(Array.isArray(response.body.ingredients)).toBe(true);
     });
   });
 
