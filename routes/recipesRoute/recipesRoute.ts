@@ -124,33 +124,48 @@ recipeRouter.route("/allRecipes").get(async (request, result) => {
  *                 Ingredients:
  *                   type: array
  *                   items:
- *                     ingredientMeasurementID:
- *                       type: integer
- *                       description: The ingredient measurement ID
- *                       example: 1
- *                     ingredient:
- *                       type: array
- *                       items:
- *                         ingredientID:
- *                           type: integer
- *                           description: The ingredient ID
- *                           example: 1
- *                         ingredientName:
- *                           type: string
- *                           description: The ingredient name of the ingredient
- *                           example: Turmeric
- *                         ingredientDescription:
- *                           type: string
- *                           description: The description of the ingredient
- *                           example: Turmeric powder has a warm, bitter, black pepper-like flavor and earthy, mustard-like aroma.
- *                         ingredientInfoURL:
- *                           type: string
- *                           description: The ingredient measurement ID
- *                           example: https://en.wikipedia.org/wiki/Turmeric
- *                     measurementSize:
+ *                     type: object
+ *                     properties:
+ *                       ingredientMeasurementID:
  *                         type: integer
+ *                         description: The ingredient measurement ID
+ *                         example: 1
+ *                       ingredient:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             ingredientID:
+ *                               type: integer
+ *                               description: The ingredient ID
+ *                               example: 1
+ *                             ingredientName:
+ *                               type: string
+ *                               description: The ingredient name of the ingredient
+ *                               example: Turmeric
+ *                             ingredientDescription:
+ *                               type: string
+ *                               description: The description of the ingredient
+ *                               example: Turmeric powder has a warm, bitter, black pepper-like flavor and earthy, mustard-like aroma.
+ *                             ingredientInfoURL:
+ *                               type: string
+ *                               description: The url to find more information about the ingredient
+ *                               example: https://en.wikipedia.org/wiki/Turmeric
+ *                       measurementSize:
+ *                         type: string
  *                         description: The amount of the ingredient required
  *                         example: 500
+ *                       measurementType:
+ *                         type: object
+ *                         properties:
+ *                           measurementTypeID:
+ *                             type: integer
+ *                             description: The measurement type ID
+ *                             example: 1
+ *                           measurementType:
+ *                             type: string
+ *                             description: The measurement type
+ *                             example: Grams
  */
 recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
   const requestedRecipeID = parseInt(request.params.recipeID);
@@ -278,8 +293,9 @@ recipeRouter
           },
         });
         result.status(201);
-        result.json("Recipe added");
+        result.json(newRecipe);
       } catch (error) {
+        result.status(400);
         result.json(error);
       }
     }
