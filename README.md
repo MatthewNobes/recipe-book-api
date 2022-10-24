@@ -1,6 +1,6 @@
 # recipe-book-api
 
-The api middleware for the recipe book app I have been developing. {complete later}
+The api middleware for the recipe book app I have been developing. It serves data from my local recipe book SQL Server database to the front end app I been working on.
 
 ## Documentation (Swagger)
 
