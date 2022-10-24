@@ -15,3 +15,27 @@ describe("GET /api/measurementTypes/measurementTypes", () => {
     });
   });
 });
+
+describe("GET /api/measurementTypes/add/:measurementType", () => {
+  describe("successful circumstances", () => {
+    it("GET /api/measurementTypes/add/:measurementType", async () => {
+      const measurementType = "Kilograms";
+      const response = await request(app).post(
+        "/api/measurementTypes/add/" + measurementType
+      );
+
+      expect(response.statusCode).toBe(201);
+    });
+  });
+
+  describe("unsuccessful circumstances", () => {
+    it("GET /api/measurementTypes/add/:measurementType", async () => {
+      const measurementType = "";
+      const response = await request(app).post(
+        "/api/measurementTypes/add/" + measurementType
+      );
+
+      expect(response.statusCode).toBe(404);
+    });
+  });
+});
