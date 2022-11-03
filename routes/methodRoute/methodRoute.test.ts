@@ -24,3 +24,45 @@ describe("GET /api/method/recipesMethod/:recipeID", () => {
     });
   });
 });
+
+describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
+  describe("successful circumstances", () => {
+    it("All conditions valid", async () => {
+      const recipeID = 1;
+      const stepNumber = 1;
+      const stepText = "Boil the kettle";
+      const response = await request(app).post(
+        "/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText
+      );
+
+      expect(response.statusCode).toBe(201);
+      expect(response.body).toBe("New instruction added");
+    });
+  });
+
+  describe("unsuccessful circumstances", () => {
+    it("invalid step number", async () => {
+      const recipeID = 1;
+      const stepNumber = 0;
+      const stepText = "Boil the kettle";
+      const response = await request(app).post(
+        "/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText
+      );
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toBe("invalid step number");
+    });
+
+    it("invalid recipeID", async () => {
+      const recipeID = 0;
+      const stepNumber = 1;
+      const stepText = "Boil the kettle";
+      const response = await request(app).post(
+        "/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText
+      );
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toBe("the recipeID does not exist");
+    });
+  });
+});
