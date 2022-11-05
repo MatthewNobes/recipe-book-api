@@ -138,3 +138,22 @@ describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
     });
   });
 });
+
+describe("PATCH /api/method/instructionTextUpdate/:recipeID/:stepText", () => {
+  describe("successful circumstances", () => {
+    it("Valid text update conditions valid", async () => {
+      const recipeID = 1;
+      const stepText = "Do something different";
+      const response = await request(app).put(
+        "/api/method/instructionTextUpdate/" + recipeID + "/" + stepText
+      );
+
+      expect(response.statusCode).toBe(200);
+      expect(typeof response.body.data.recipeID).toBe("number");
+      expect(typeof response.body.data.recipeStepID).toBe("number");
+      expect(typeof response.body.data.stepNumber).toBe("number");
+      expect(typeof response.body.data.stepText).toBe("string");
+      expect(response.body.data.stepText).toBe(stepText);
+    });
+  });
+});

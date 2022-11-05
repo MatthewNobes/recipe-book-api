@@ -297,4 +297,76 @@ methodRouter
     }
   });
 
+/**
+ * @swagger
+ * /api/method/instruction/{recipeStepID}/{stepText}:
+ *   put:
+ *     summary: Update the instruction text
+ *     description: Updates the text for an instruction
+ *     tags:
+ *       - Method
+ *     parameters:
+ *       - in: path
+ *         name: recipeStepID
+ *         required: true
+ *         description: Numeric ID of the instruction.
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: stepText
+ *         required: true
+ *         description: The new instruction text
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The updated instruction
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     recipeStepID:
+ *                       type: integer
+ *                       description: The ID of the step.
+ *                       example: 1
+ *                     stepNumber:
+ *                       type: integer
+ *                       description: The number referring to the order of the instruction
+ *                       example: 1
+ *                     stepText:
+ *                       type: string
+ *                       description: The instruction text
+ *                       example: Boil the kettle
+ *                     recipeID:
+ *                       type: integer
+ *                       description: The recipes ID.
+ *                       example: 1
+ */
+methodRouter
+  .route("/instructionTextUpdate/:recipeStepID/:stepText")
+  .put(async (request, result) => {
+    const recipeStepID = parseInt(request.params.recipeStepID);
+    const updatedStepText = request.params.stepText;
+
+    try {
+      const updatedInstruction = await prisma.recipeSteps.update({
+        where: { recipeStepID: recipeStepID },
+        data: { stepText: updatedStepText },
+      });
+
+      if (updatedInstruction) {
+        result.json({ data: updatedInstruction });
+      } else {
+        throw "no instruction found";
+      }
+    } catch (error) {
+      result.status(400);
+      result.json({ data: error });
+    }
+  });
+
 export default methodRouter;
