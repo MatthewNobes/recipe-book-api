@@ -30,6 +30,35 @@ describe("GET /api/method/recipesMethod/:recipeID", () => {
   });
 });
 
+describe("GET /api/method/instruction/:recipeStepID", () => {
+  describe("successful circumstances", () => {
+    it("GET /api/method/instruction/:recipeStepID", async () => {
+      const recipeStepID = 1;
+      const response = await request(app).get(
+        "/api/method/instruction/" + recipeStepID
+      );
+
+      expect(response.statusCode).toBe(200);
+      expect(typeof response.body.data.recipeID).toBe("number");
+      expect(typeof response.body.data.recipeStepID).toBe("number");
+      expect(typeof response.body.data.stepNumber).toBe("number");
+      expect(typeof response.body.data.stepText).toBe("string");
+    });
+  });
+
+  describe("unsuccessful circumstances", () => {
+    it("GET /api/method/instruction/:recipeStepID", async () => {
+      const recipeStepID = 0;
+      const response = await request(app).get(
+        "/api/method/instruction/" + recipeStepID
+      );
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body.data).toBe("no instruction found");
+    });
+  });
+});
+
 describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
   describe("successful circumstances", () => {
     it("All conditions valid", async () => {

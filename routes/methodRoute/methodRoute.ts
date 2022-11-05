@@ -3,6 +3,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { getMethodFromRecipeID } from "./getMethodFromRecipeID/getMethodFromRecipeID";
 import { doesRecipeExist } from "../recipesRoute/doesRecipeExist/doesRecipeExist";
+import { getInstructionFromRecipeStepID } from "./getInstructionFromRecipeStepID/getInstructionFromRecipeStepID";
 
 const prisma = new PrismaClient();
 let methodRouter = express.Router();
@@ -72,6 +73,68 @@ methodRouter.route("/recipesMethod/:recipeID").get(async (request, result) => {
     result.json({ data: error });
   }
 });
+
+/**
+ * @swagger
+ * /api/method/instruction/{recipeStepID}:
+ *   get:
+ *     summary: Retrieve a specific instruction
+ *     description: Retrieve a specific recipe instruction
+ *     tags:
+ *       - Method
+ *     parameters:
+ *       - in: path
+ *         name: recipeStepID
+ *         required: true
+ *         description: Numeric ID of the instruction.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The specified recipe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     recipeStepID:
+ *                       type: integer
+ *                       description: The ID of the step.
+ *                       example: 1
+ *                     stepNumber:
+ *                       type: integer
+ *                       description: The number referring to the order of the instruction
+ *                       example: 1
+ *                     stepText:
+ *                       type: string
+ *                       description: The instruction text
+ *                       example: Boil the kettle
+ *                     recipeID:
+ *                       type: integer
+ *                       description: The recipes ID.
+ *                       example: 1
+ */
+methodRouter
+  .route("/instruction/:recipeStepID")
+  .get(async (request, result) => {
+    const recipeStepID = parseInt(request.params.recipeStepID);
+
+    try {
+      const method = await getInstructionFromRecipeStepID(recipeStepID);
+
+      if (method) {
+        result.json({ data: method });
+      } else {
+        throw "no instruction found";
+      }
+    } catch (error) {
+      result.status(400);
+      result.json({ data: error });
+    }
+  });
 
 /**
  * @swagger

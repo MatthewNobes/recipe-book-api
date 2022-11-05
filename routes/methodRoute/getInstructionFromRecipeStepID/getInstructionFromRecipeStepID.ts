@@ -9,13 +9,13 @@ interface RecipeStep {
   recipeID: number;
 }
 
-export const getMethodFromRecipeID = async (requestedRecipeID: number) => {
-  const steps = await prisma.recipeSteps.findMany({
-    where: { recipeID: requestedRecipeID },
+export const getInstructionFromRecipeStepID = async (recipeStepID: number) => {
+  const steps = await prisma.recipeSteps.findFirst({
+    where: { recipeStepID: recipeStepID },
   });
 
   if (steps) {
-    const methodObj: RecipeStep[] = steps;
+    const methodObj: RecipeStep = steps;
     return methodObj;
   }
 
