@@ -60,7 +60,7 @@ methodRouter.route("/recipesMethod/:recipeID").get(async (request, result) => {
 
     if (method) {
       if (method.length >= 1) {
-        result.json(method);
+        result.json({ data: method });
       } else {
         throw "no method found";
       }
@@ -68,17 +68,17 @@ methodRouter.route("/recipesMethod/:recipeID").get(async (request, result) => {
       throw "no method found";
     }
   } catch (error) {
-    console.log(error);
-    result.sendStatus(400);
+    result.status(400);
+    result.json({ data: error });
   }
 });
 
 /**
  * @swagger
- * /api/method/add/:recipeID/:stepNumber/:stepText:
+ * /api/method/add/{recipeID}/{stepNumber}/{stepText}:
  *   post:
- *     summary: Retrieve a recipes method
- *     description: Retrieve a recipes method from its recipeID.
+ *     summary: Adds a new instruction
+ *     description: Adds a new recipe instruction with an associated recipe ID and step number
  *     tags:
  *       - Method
  *     parameters:
@@ -99,14 +99,34 @@ methodRouter.route("/recipesMethod/:recipeID").get(async (request, result) => {
  *         required: true
  *         description: The steps instructions
  *         schema:
- *           type: integer
+ *           type: string
  *     responses:
  *       201:
  *         description: Confirmation of the instruction added
  *         content:
  *           application/json:
  *             schema:
- *               type: string
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     recipeStepID:
+ *                       type: integer
+ *                       description: The ID of the step.
+ *                       example: 1
+ *                     stepNumber:
+ *                       type: integer
+ *                       description: The number referring to the order of the instruction
+ *                       example: 1
+ *                     stepText:
+ *                       type: string
+ *                       description: The instruction text
+ *                       example: Boil the kettle
+ *                     recipeID:
+ *                       type: integer
+ *                       description: The recipes ID.
+ *                       example: 1
  */
 methodRouter
   .route("/add/:recipeID/:stepNumber/:stepText")
@@ -141,13 +161,12 @@ methodRouter
           },
         });
 
-        console.log(newRecipe);
         result.status(201);
-        result.json("New instruction added");
+        result.json({ data: newRecipe });
       }
     } catch (error) {
       result.status(400);
-      result.json(error);
+      result.json({ data: error });
     }
   });
 

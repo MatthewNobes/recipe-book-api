@@ -10,6 +10,10 @@ describe("GET /api/method/recipesMethod/:recipeID", () => {
       );
 
       expect(response.statusCode).toBe(200);
+      expect(typeof response.body.data[0].recipeID).toBe("number");
+      expect(typeof response.body.data[0].recipeStepID).toBe("number");
+      expect(typeof response.body.data[0].stepNumber).toBe("number");
+      expect(typeof response.body.data[0].stepText).toBe("string");
     });
   });
 
@@ -21,6 +25,7 @@ describe("GET /api/method/recipesMethod/:recipeID", () => {
       );
 
       expect(response.statusCode).toBe(400);
+      expect(response.body.data).toBe("no method found");
     });
   });
 });
@@ -36,7 +41,10 @@ describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
       );
 
       expect(response.statusCode).toBe(201);
-      expect(response.body).toBe("New instruction added");
+      expect(typeof response.body.data.recipeID).toBe("number");
+      expect(typeof response.body.data.recipeStepID).toBe("number");
+      expect(typeof response.body.data.stepNumber).toBe("number");
+      expect(typeof response.body.data.stepText).toBe("string");
     });
   });
 
@@ -50,7 +58,7 @@ describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
       );
 
       expect(response.statusCode).toBe(400);
-      expect(response.body).toBe("invalid step number");
+      expect(response.body.data).toBe("invalid step number");
     });
 
     it("invalid recipeID", async () => {
@@ -62,7 +70,7 @@ describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
       );
 
       expect(response.statusCode).toBe(400);
-      expect(response.body).toBe("the recipeID does not exist");
+      expect(response.body.data).toBe("the recipeID does not exist");
     });
   });
 });
