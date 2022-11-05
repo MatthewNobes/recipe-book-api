@@ -59,7 +59,7 @@ describe("GET /api/method/instruction/:recipeStepID", () => {
   });
 });
 
-describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
+describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
   describe("successful circumstances", () => {
     it("All conditions valid", async () => {
       const recipeID = 1;
@@ -100,6 +100,33 @@ describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
 
       expect(response.statusCode).toBe(400);
       expect(response.body.data).toBe("the recipeID does not exist");
+    });
+  });
+});
+
+describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
+  let activeID = 0;
+  beforeEach(async () => {
+    const recipeID = 1;
+    const stepNumber = 1;
+    const stepText = "Boil the kettle";
+    const response = await request(app).post(
+      "/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText
+    );
+
+    activeID = await response.body.data.recipeStepID;
+  });
+  describe("successful circumstances", () => {
+    it("Valid recipeStepID", async () => {
+      const response = await request(app).delete(
+        "/api/method/instruction/" + activeID
+      );
+
+      expect(response.statusCode).toBe(200);
+      expect(typeof response.body.data.recipeID).toBe("number");
+      expect(typeof response.body.data.recipeStepID).toBe("number");
+      expect(typeof response.body.data.stepNumber).toBe("number");
+      expect(typeof response.body.data.stepText).toBe("string");
     });
   });
 });
