@@ -216,7 +216,7 @@ methodRouter
       if (stepNumber <= 0) {
         throw "invalid step number";
       } else {
-        const newRecipe = await prisma.recipeSteps.create({
+        const newInstruction = await prisma.recipeSteps.create({
           data: {
             recipeID: recipeID,
             stepNumber: stepNumber,
@@ -225,7 +225,7 @@ methodRouter
         });
 
         result.status(201);
-        result.json({ data: newRecipe });
+        result.json({ data: newInstruction });
       }
     } catch (error) {
       result.status(400);

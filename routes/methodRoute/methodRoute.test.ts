@@ -112,7 +112,7 @@ describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
   });
 });
 
-describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
+describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
   let activeID = 0;
   beforeEach(async () => {
     const recipeID = 1;
@@ -139,7 +139,7 @@ describe("GET /api/method/add/:recipeID/:stepNumber/:stepText", () => {
   });
 });
 
-describe("PATCH /api/method/instructionTextUpdate/:recipeID/:stepText", () => {
+describe("PUT /api/method/instructionTextUpdate/:recipeID/:stepText", () => {
   describe("successful circumstances", () => {
     it("Valid text update conditions valid", async () => {
       const recipeID = 1;
