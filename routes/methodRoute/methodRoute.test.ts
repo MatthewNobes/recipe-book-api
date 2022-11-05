@@ -61,6 +61,12 @@ describe("GET /api/method/instruction/:recipeStepID", () => {
 
 describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
   describe("successful circumstances", () => {
+    let addedID = 0;
+    afterEach(async () => {
+      const response = await request(app).delete(
+        "/api/method/instruction/" + addedID
+      );
+    });
     it("All conditions valid", async () => {
       const recipeID = 1;
       const stepNumber = 1;
@@ -74,6 +80,8 @@ describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
       expect(typeof response.body.data.recipeStepID).toBe("number");
       expect(typeof response.body.data.stepNumber).toBe("number");
       expect(typeof response.body.data.stepText).toBe("string");
+
+      addedID = response.body.data.recipeStepID;
     });
   });
 
