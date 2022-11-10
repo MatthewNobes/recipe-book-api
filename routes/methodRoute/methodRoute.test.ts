@@ -112,7 +112,7 @@ describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
   });
 });
 
-describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
+describe("DELETE /api/method/instruction/:recipeStepID", () => {
   let activeID = 0;
   beforeEach(async () => {
     const recipeID = 1;
@@ -135,6 +135,38 @@ describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
       expect(typeof response.body.data.recipeStepID).toBe("number");
       expect(typeof response.body.data.stepNumber).toBe("number");
       expect(typeof response.body.data.stepText).toBe("string");
+    });
+  });
+});
+
+describe("DELETE /api/method/recipe/:recipeID", () => {
+  const recipeID = 1000;
+  beforeEach(async () => {
+    let activeID = 0;
+    const stepNumber = 1;
+    const stepText = "Boil the kettle";
+    const response = await request(app).post(
+      "/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText
+    );
+
+    activeID = await response.body.data.recipeStepID;
+  });
+  describe("successful circumstances", () => {
+    it("Should return a count of the number of records that were deleted", async () => {
+      const response = await request(app).delete(
+        "/api/method/recipe/" + recipeID
+      );
+      expect(response.statusCode).toBe(200);
+      expect(typeof response.body.data.count).toBe("number");
+    });
+    it("Should have emptied the recipeStep table of all records with a recipeID of 1000", async () => {
+      const recipeID = 1000;
+      const response = await request(app).get(
+        "/api/method/recipesMethod/" + recipeID
+      );
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body.data).toBe("no method found");
     });
   });
 });

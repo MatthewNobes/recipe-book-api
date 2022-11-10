@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { getMethodFromRecipeID } from "./getMethodFromRecipeID/getMethodFromRecipeID";
 import { doesRecipeExist } from "../recipesRoute/doesRecipeExist/doesRecipeExist";
 import { getInstructionFromRecipeStepID } from "./getInstructionFromRecipeStepID/getInstructionFromRecipeStepID";
+import { deleteRecipesInstructions } from "./deleteRecipesInstructions/deleteRecipesInstructions";
 
 const prisma = new PrismaClient();
 let methodRouter = express.Router();
@@ -296,6 +297,54 @@ methodRouter
       result.json({ data: error });
     }
   });
+
+/**
+ * @swagger
+ * /api/method/recipe/{recipeID}:
+ *   delete:
+ *     summary: Removes all the instructions for a recipe
+ *     description: Removes all the instructions for a recipe.
+ *     tags:
+ *       - Method
+ *     parameters:
+ *       - in: path
+ *         name: recipeID
+ *         required: true
+ *         description: Numeric ID of the recipe.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The specified recipe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     count:
+ *                       type: integer
+ *                       description: The number of records removed
+ *                       example: 1
+ */
+methodRouter.route("/recipe/:recipeID").delete(async (request, result) => {
+  const recipeID = parseInt(request.params.recipeID);
+
+  try {
+    const countOfDeletedRecords = await deleteRecipesInstructions(recipeID);
+
+    if (countOfDeletedRecords) {
+      result.json({ data: countOfDeletedRecords });
+    } else {
+      throw "no instruction found";
+    }
+  } catch (error) {
+    result.status(400);
+    result.json({ data: error });
+  }
+});
 
 /**
  * @swagger
