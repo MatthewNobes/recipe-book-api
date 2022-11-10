@@ -1,7 +1,7 @@
 // file deepcode ignore ComparisonToNaN: its fucking annoying
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { getRecipeFromID } from "./getRecipeFromID/getRecipeFromID";
+import { getRecipeFromID } from "./";
 
 const prisma = new PrismaClient();
 let recipeRouter = express.Router();

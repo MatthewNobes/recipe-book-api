@@ -1,9 +1,11 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { getMethodFromRecipeID } from "./getMethodFromRecipeID/getMethodFromRecipeID";
-import { doesRecipeExist } from "../recipesRoute/doesRecipeExist/doesRecipeExist";
-import { getInstructionFromRecipeStepID } from "./getInstructionFromRecipeStepID/getInstructionFromRecipeStepID";
-import { deleteRecipesInstructions } from "./deleteRecipesInstructions/deleteRecipesInstructions";
+import { doesRecipeExist } from "../recipesRoute";
+import {
+  getMethodFromRecipeID,
+  deleteRecipesInstructions,
+  getInstructionFromRecipeStepID,
+} from "./";
 
 const prisma = new PrismaClient();
 let methodRouter = express.Router();
