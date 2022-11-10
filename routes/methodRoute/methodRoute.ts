@@ -1,4 +1,3 @@
-"use strict";
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { getMethodFromRecipeID } from "./getMethodFromRecipeID/getMethodFromRecipeID";

@@ -1,4 +1,3 @@
-"use strict";
 import app from "./app";
 
 const port = process.env.PORT || 4444;

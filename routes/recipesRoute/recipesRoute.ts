@@ -1,4 +1,3 @@
-"use strict";
 // file deepcode ignore ComparisonToNaN: its fucking annoying
 import express from "express";
 import { PrismaClient } from "@prisma/client";
