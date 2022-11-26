@@ -88,6 +88,41 @@ router.route("/country/:countryID").get(async (request, result) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/countries/add/{country}:
+ *   post:
+ *     summary: Adds a new country
+ *     description: Adds a new country
+ *     tags:
+ *       - Countries
+ *     parameters:
+ *       - in: path
+ *         name: country
+ *         required: true
+ *         description: The country to add
+ *         schema:
+ *           type: string
+ *     responses:
+ *       201:
+ *         description: Confirmation of the country added
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     countryID:
+ *                       type: integer
+ *                       description: The ID of the country.
+ *                       example: 1
+ *                     country:
+ *                       type: string
+ *                       description: The country that has been added
+ *                       example: France
+ */
 router.route("/add/:country").post(async (request, result) => {
   const country: string = request.params.country;
 
