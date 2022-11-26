@@ -1,7 +1,9 @@
 import express from "express";
+import { PrismaClient } from "@prisma/client";
 import { getAllCountries } from "./getAllCountries/getAllCountries";
 import { getCountryByID } from "./getCountryByID/getCountryByID";
 
+const prisma = new PrismaClient();
 let router = express.Router();
 
 /**
@@ -83,6 +85,26 @@ router.route("/country/:countryID").get(async (request, result) => {
   } else {
     result.status(400);
     result.json({ data: "no country found" });
+  }
+});
+
+router.route("/add/:country").post(async (request, result) => {
+  const country: string = request.params.country;
+
+  try {
+    if (country === "") {
+      throw "A country must be passed in";
+    }
+    const newCountry = await prisma.countries.create({
+      data: {
+        country: country,
+      },
+    });
+    result.status(201);
+    result.json({ data: newCountry });
+  } catch (error) {
+    result.status(400);
+    result.json({ data: error });
   }
 });
 

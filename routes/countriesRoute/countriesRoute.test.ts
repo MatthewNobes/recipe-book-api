@@ -40,3 +40,37 @@ describe("GET /api/countries/country/:countryID", () => {
     expect(response.body.data).toBe("no country found");
   });
 });
+
+describe("POST /api/countries/add/:countryID", () => {
+  describe("successful circumstances", () => {
+    /** 
+    let addedID = 0;
+    afterEach(async () => {
+      const response = await request(app).delete(
+        "/api/method/instruction/" + addedID
+      );
+    });
+    */
+    it("All conditions valid", async () => {
+      const country = "Belgium";
+
+      const response = await request(app).post("/api/countries/add/" + country);
+
+      expect(response.statusCode).toBe(201);
+      expect(typeof response.body.data.countryID).toBe("number");
+      expect(typeof response.body.data.country).toBe("string");
+
+      // addedID = response.body.data.recipeStepID;
+    });
+  });
+
+  describe("unsuccessful circumstances", () => {
+    it("empty country", async () => {
+      const country = "";
+
+      const response = await request(app).post("/api/countries/add/" + country);
+
+      expect(response.statusCode).toBe(404);
+    });
+  });
+});
