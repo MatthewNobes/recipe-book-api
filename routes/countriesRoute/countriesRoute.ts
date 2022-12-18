@@ -37,8 +37,8 @@ let router = express.Router();
  *                         example: France
  */
 router.route("/countries").get(async (request, result) => {
-  const allCountries = await getAllCountries();
-  result.json({ data: allCountries });
+	const allCountries = await getAllCountries();
+	result.json({ data: allCountries });
 });
 
 /**
@@ -77,15 +77,15 @@ router.route("/countries").get(async (request, result) => {
  *                       example: France
  */
 router.route("/country/:countryID").get(async (request, result) => {
-  const countryID = parseInt(request.params.countryID);
-  const country = await getCountryByID(countryID);
+	const countryID = parseInt(request.params.countryID);
+	const country = await getCountryByID(countryID);
 
-  if (country) {
-    result.json({ data: country });
-  } else {
-    result.status(400);
-    result.json({ data: "no country found" });
-  }
+	if (country) {
+		result.json({ data: country });
+	} else {
+		result.status(400);
+		result.json({ data: "no country found" });
+	}
 });
 
 /**
@@ -124,23 +124,23 @@ router.route("/country/:countryID").get(async (request, result) => {
  *                       example: France
  */
 router.route("/add/:country").post(async (request, result) => {
-  const country: string = request.params.country;
+	const country: string = request.params.country;
 
-  try {
-    if (country === "") {
-      throw "A country must be passed in";
-    }
-    const newCountry = await prisma.countries.create({
-      data: {
-        country: country,
-      },
-    });
-    result.status(201);
-    result.json({ data: newCountry });
-  } catch (error) {
-    result.status(400);
-    result.json({ data: error });
-  }
+	try {
+		if (country === "") {
+			throw "A country must be passed in";
+		}
+		const newCountry = await prisma.countries.create({
+			data: {
+				country: country,
+			},
+		});
+		result.status(201);
+		result.json({ data: newCountry });
+	} catch (error) {
+		result.status(400);
+		result.json({ data: error });
+	}
 });
 
 export default router;

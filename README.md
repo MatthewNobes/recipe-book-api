@@ -1,10 +1,14 @@
 # recipe-book-api
 
-The api middleware for the recipe book app I have been developing. It serves data from my local recipe book SQL Server database to the front end app I been working on.
+The api middleware for the recipe book app I have been developing. It serves
+data from my local recipe book SQL Server database to the front end app I been
+working on.
 
 ## Documentation (Swagger)
 
-This API has been designed to conform with the OpenAPI 3.0 standard. The swagger documentation page of the available routes for this API can be found at the following route:
+This API has been designed to conform with the OpenAPI 3.0 standard. The swagger
+documentation page of the available routes for this API can be found at the
+following route:
 
 ```
 http://localhost:4444/swagger/
@@ -12,16 +16,22 @@ http://localhost:4444/swagger/
 
 ## Development
 
-To get started with this API, the first step is to install all the required NPM packages. This can be done by using either of the two NPM install commands:
+To get started with this API, the first step is to install all the required NPM
+packages. This can be done by using either of the two NPM install commands:
 
 ```
 npm i
 npm install
 ```
 
-NOTE: This requires node and npm to be installed. A Long Term Support (LTS) version is recommend
+NOTE: This requires node and npm to be installed. A Long Term Support (LTS)
+version is recommend
 
-The next stage is to set up your database. Eventually a DB setup SQL script will be provided. In a .env file placed at the root of the application, set the database connection string in a variable called DATABASE_URL. This is done in the standard JDBC standard. Below shows the structure and an example. It requies the following parameters:
+The next stage is to set up your database. Eventually a DB setup SQL script will
+be provided. In a .env file placed at the root of the application, set the
+database connection string in a variable called DATABASE_URL. This is done in
+the standard JDBC standard. Below shows the structure and an example. It requies
+the following parameters:
 
 - Server hostname or IP
 - Server port
@@ -35,7 +45,10 @@ DATABASE_URL="sqlserver://<server-ip-address>:<port>;database=<database-name>;us
 Example: DATABASE_URL="sqlserver://192.168.1.1:1433;database=Recipe Book;user=sa;password=password;encrypt=true;TrustServerCertificate=true;"
 ```
 
-To ensure the database can be accessed using prisma run the first command below to update the prisma schema, the second command allows this updated schema to be provided by prisma client. If you make any changes to the database, you will need to run both of these commands again.
+To ensure the database can be accessed using prisma run the first command below
+to update the prisma schema, the second command allows this updated schema to be
+provided by prisma client. If you make any changes to the database, you will
+need to run both of these commands again.
 
 ```
 npm run prisma-pull
@@ -44,7 +57,9 @@ npm run prisma-generate
 
 ### Testing
 
-This API has been designed using Test Driven Development (TDD). Therefore, Jest test coverage is high allowing for alteration tracking to be done using the testing suite. An NPM command has been setup for this:
+This API has been designed using Test Driven Development (TDD). Therefore, Jest
+test coverage is high allowing for alteration tracking to be done using the
+testing suite. An NPM command has been setup for this:
 
 ```
 npm test
@@ -52,16 +67,23 @@ npm test
 
 ## Deployment
 
-This API has been setup with Docker support from the outset. An image of this app can be created using the docker build command as seen below. (insert-name marks where you can set the Docker image name, the -t flag allows this name tag to be allocated)
+This API has been setup with Docker support from the outset. An image of this
+app can be created using the docker build command as seen below. (insert-name
+marks where you can set the Docker image name, the -t flag allows this name tag
+to be allocated)
 
 ```
 docker build . -t insert-name
 ```
 
-To load this Docker image into a container, the docker run command is used as follows with the name selected for the image in the previous step in place for insert-name.
+To load this Docker image into a container, the docker run command is used as
+follows with the name selected for the image in the previous step in place for
+insert-name.
 
 ```
 docker run -p 4444:4444 -d insert-name
 ```
 
-NOTE: The Dockerfile has been configured to run on port 4444. The app can be run on another port by replacing the first 4444 in the command above with your own choice of port.
+NOTE: The Dockerfile has been configured to run on port 4444. The app can be run
+on another port by replacing the first 4444 in the command above with your own
+choice of port.

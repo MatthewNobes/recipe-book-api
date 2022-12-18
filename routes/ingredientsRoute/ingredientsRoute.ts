@@ -43,8 +43,8 @@ let router = express.Router();
  *                         example: 5
  */
 router.route("/ingredients").get(async (request, result) => {
-  const allIngredients = await prisma.ingredients.findMany();
-  result.json(allIngredients);
+	const allIngredients = await prisma.ingredients.findMany();
+	result.json(allIngredients);
 });
 
 /**
@@ -101,26 +101,26 @@ router.route("/ingredients").get(async (request, result) => {
  *                     example: 5
  */
 router
-  .route(
-    "/add-ingredient/:ingredientName-:ingredientDescription-:ingredientInfoURL"
-  )
-  .post(async (request, result) => {
-    try {
-      const ingredientName = request.params.ingredientName;
-      const ingredientDescription = request.params.ingredientDescription;
-      const ingredientInfoURL = request.params.ingredientInfoURL;
+	.route(
+		"/add-ingredient/:ingredientName-:ingredientDescription-:ingredientInfoURL",
+	)
+	.post(async (request, result) => {
+		try {
+			const ingredientName = request.params.ingredientName;
+			const ingredientDescription = request.params.ingredientDescription;
+			const ingredientInfoURL = request.params.ingredientInfoURL;
 
-      if (ingredientName) {
-        //check if ingredient already in system, if not add it here
-        //add to ingredients table
-      }
+			if (ingredientName) {
+				//check if ingredient already in system, if not add it here
+				//add to ingredients table
+			}
 
-      result.status(201);
-      result.json(ingredientName + ingredientDescription + ingredientInfoURL);
-    } catch (error) {
-      result.status(400);
-      result.json(error);
-    }
-  });
+			result.status(201);
+			result.json(ingredientName + ingredientDescription + ingredientInfoURL);
+		} catch (error) {
+			result.status(400);
+			result.json(error);
+		}
+	});
 
 export default router;

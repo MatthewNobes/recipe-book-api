@@ -61,8 +61,8 @@ let recipeRouter = express.Router();
  *                         example: https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils
  */
 recipeRouter.route("/allRecipes").get(async (request, result) => {
-  const allRecipes = await prisma.recipes.findMany();
-  result.json(allRecipes);
+	const allRecipes = await prisma.recipes.findMany();
+	result.json(allRecipes);
 });
 
 /**
@@ -167,20 +167,20 @@ recipeRouter.route("/allRecipes").get(async (request, result) => {
  *                             example: Grams
  */
 recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
-  const requestedRecipeID = parseInt(request.params.recipeID);
+	const requestedRecipeID = parseInt(request.params.recipeID);
 
-  try {
-    const recipe = await getRecipeFromID(requestedRecipeID);
+	try {
+		const recipe = await getRecipeFromID(requestedRecipeID);
 
-    if (recipe) {
-      result.json(recipe);
-    } else {
-      throw "recipe not found";
-    }
-  } catch (error) {
-    console.log(error);
-    result.sendStatus(400);
-  }
+		if (recipe) {
+			result.json(recipe);
+		} else {
+			throw "recipe not found";
+		}
+	} catch (error) {
+		console.log(error);
+		result.sendStatus(400);
+	}
 });
 
 /**
@@ -245,56 +245,56 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
  *
  */
 recipeRouter
-  .route(
-    "/add-recipe/:recipeName-:recipeDescription-:recipeDifficultyRating-:recipePrepTime-:recipeCookTime-:servingNumber-:recipeSource"
-  )
-  .post(async (request, result) => {
-    const recipeName = request.params.recipeName;
-    const recipeDescription = request.params.recipeDescription;
-    const recipeDifficultyRating = parseInt(
-      request.params.recipeDifficultyRating
-    );
-    const recipePrepTime = request.params.recipePrepTime;
-    const recipeCookTime = request.params.recipeCookTime;
-    const servingNumber = parseInt(request.params.servingNumber);
-    const recipeSource = request.params.recipeSource;
+	.route(
+		"/add-recipe/:recipeName-:recipeDescription-:recipeDifficultyRating-:recipePrepTime-:recipeCookTime-:servingNumber-:recipeSource",
+	)
+	.post(async (request, result) => {
+		const recipeName = request.params.recipeName;
+		const recipeDescription = request.params.recipeDescription;
+		const recipeDifficultyRating = parseInt(
+			request.params.recipeDifficultyRating,
+		);
+		const recipePrepTime = request.params.recipePrepTime;
+		const recipeCookTime = request.params.recipeCookTime;
+		const servingNumber = parseInt(request.params.servingNumber);
+		const recipeSource = request.params.recipeSource;
 
-    if (
-      recipeName === "" ||
-      recipeDescription === "" ||
-      recipeDifficultyRating === NaN ||
-      recipePrepTime === "" ||
-      recipeCookTime === ""
-    ) {
-      result.json("ERROR 1: Some required recipe parameters are missing");
-    } else if (
-      recipeName.length > 255 ||
-      recipeDescription.length > 1024 ||
-      recipeSource.length > 512
-    ) {
-      result.json(
-        "ERROR 2: Some recipe parameters exceed the maximum allowed size"
-      );
-    } else {
-      try {
-        const newRecipe = await prisma.recipes.create({
-          data: {
-            RecipeName: recipeName,
-            RecipeDecsription: recipeDescription,
-            RecipeDifficultyRating: recipeDifficultyRating,
-            RecipePrepTime: recipePrepTime,
-            RecipeCookTime: recipeCookTime,
-            ServingNumber: servingNumber,
-            RecipeSource: recipeSource,
-          },
-        });
-        result.status(201);
-        result.json(newRecipe);
-      } catch (error) {
-        result.status(400);
-        result.json(error);
-      }
-    }
-  });
+		if (
+			recipeName === "" ||
+			recipeDescription === "" ||
+			Number.isNaN(recipeDifficultyRating) ||
+			recipePrepTime === "" ||
+			recipeCookTime === ""
+		) {
+			result.json("ERROR 1: Some required recipe parameters are missing");
+		} else if (
+			recipeName.length > 255 ||
+			recipeDescription.length > 1024 ||
+			recipeSource.length > 512
+		) {
+			result.json(
+				"ERROR 2: Some recipe parameters exceed the maximum allowed size",
+			);
+		} else {
+			try {
+				const newRecipe = await prisma.recipes.create({
+					data: {
+						RecipeName: recipeName,
+						RecipeDecsription: recipeDescription,
+						RecipeDifficultyRating: recipeDifficultyRating,
+						RecipePrepTime: recipePrepTime,
+						RecipeCookTime: recipeCookTime,
+						ServingNumber: servingNumber,
+						RecipeSource: recipeSource,
+					},
+				});
+				result.status(201);
+				result.json(newRecipe);
+			} catch (error) {
+				result.status(400);
+				result.json(error);
+			}
+		}
+	});
 
 export default recipeRouter;

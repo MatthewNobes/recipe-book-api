@@ -35,29 +35,29 @@ let router = express.Router();
  *                         example: Teaspoon
  */
 router.route("/measurementTypes").get(async (request, result) => {
-  const allMeasurements = await prisma.measurementType.findMany();
-  result.json(allMeasurements);
+	const allMeasurements = await prisma.measurementType.findMany();
+	result.json(allMeasurements);
 });
 
 router.route("/add/:measurementType").post(async (request, result) => {
-  const measurementType = request.params.measurementType;
+	const measurementType = request.params.measurementType;
 
-  try {
-    if (measurementType === "") {
-      throw "Measurement type cannot be null or empty";
-    } else {
-      const newMeasurementType = await prisma.measurementType.create({
-        data: {
-          measurementType: measurementType,
-        },
-      });
-      result.status(201);
-      result.json(newMeasurementType);
-    }
-  } catch (error) {
-    result.status(401);
-    result.json(error);
-  }
+	try {
+		if (measurementType === "") {
+			throw "Measurement type cannot be null or empty";
+		} else {
+			const newMeasurementType = await prisma.measurementType.create({
+				data: {
+					measurementType: measurementType,
+				},
+			});
+			result.status(201);
+			result.json(newMeasurementType);
+		}
+	} catch (error) {
+		result.status(401);
+		result.json(error);
+	}
 });
 
 export default router;
