@@ -1,7 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { getAllCountries } from "./getAllCountries/getAllCountries";
-import { getCountryByID } from "./getCountryByID/getCountryByID";
+import { addNewCountry, getCountryByID, getAllCountries } from "./";
 
 const prisma = new PrismaClient();
 let router = express.Router();
@@ -80,7 +79,7 @@ router.route("/country/:countryID").get(async (request, result) => {
 	const countryID = parseInt(request.params.countryID);
 	const country = await getCountryByID(countryID);
 
-	if (country) {
+	if (country && country.countryID === countryID) {
 		result.json({ data: country });
 	} else {
 		result.status(400);
@@ -127,14 +126,11 @@ router.route("/add/:country").post(async (request, result) => {
 	const country: string = request.params.country;
 
 	try {
-		if (country === "") {
+		const newCountry = await addNewCountry(country);
+		if (newCountry === undefined) {
 			throw "A country must be passed in";
 		}
-		const newCountry = await prisma.countries.create({
-			data: {
-				country: country,
-			},
-		});
+
 		result.status(201);
 		result.json({ data: newCountry });
 	} catch (error) {

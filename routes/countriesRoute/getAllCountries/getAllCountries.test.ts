@@ -1,12 +1,34 @@
 import { getAllCountries } from "./getAllCountries";
+import { prismaMock } from "../../../singleton";
+import { Countries } from "@prisma/client";
 
 describe("getAllCountries", () => {
-	it("successful circumstances", async () => {
-		const allCountries = await getAllCountries();
+	const mockCountryData: Countries[] = [
+		{
+			countryID: 1,
+			country: "Test 1",
+		},
+		{
+			countryID: 2,
+			country: "Test 2",
+		},
+	];
 
-		expect(Array.isArray(allCountries)).toBe(true);
-		expect(typeof allCountries[0]).toBe("object");
-		expect(typeof allCountries[0].countryID).toBe("number");
-		expect(typeof allCountries[0].country).toBe("string");
+	beforeEach(() => {
+		prismaMock.countries.findMany.mockResolvedValue(mockCountryData);
+	});
+
+	it("should return the mocked countries", async () => {
+		const requestedCountries = await getAllCountries();
+		expect(requestedCountries).toEqual([
+			{
+				countryID: 1,
+				country: "Test 1",
+			},
+			{
+				countryID: 2,
+				country: "Test 2",
+			},
+		]);
 	});
 });
