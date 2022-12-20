@@ -1,16 +1,36 @@
 import { getMethodFromRecipeID } from "./getMethodFromRecipeID";
+import { prismaMock } from "../../../singleton";
+import { RecipeSteps } from "@prisma/client";
 
 describe("getMethodFromRecipeID", () => {
-	it("successful circumstance", async () => {
-		const method = await getMethodFromRecipeID(1);
+	const mockRecipeStepsData: RecipeSteps[] = [
+		{
+			recipeStepID: 1,
+			stepNumber: 1,
+			stepText: "Test 1",
+			recipeID: 1,
+		},
+		{
+			recipeStepID: 2,
+			stepNumber: 2,
+			stepText: "Test 1",
+			recipeID: 1,
+		},
+	];
 
-		if (method) {
-			expect(Array.isArray(method)).toBe(true);
-			expect(typeof method[0]).toBe("object");
-			expect(method[0].recipeStepID).toBeDefined();
-			expect(method[0].stepNumber).toBeDefined();
-			expect(method[0].stepText).toBeDefined();
-			expect(method[0].recipeID).toBeDefined();
-		}
+	beforeEach(() => {
+		prismaMock.recipeSteps.findMany.mockResolvedValue(mockRecipeStepsData);
+	});
+
+	it("should return the steps for recipe 1", async () => {
+		const requestedRecipeID = 1;
+		const requestedSteps = await getMethodFromRecipeID(requestedRecipeID);
+		expect(requestedSteps).toStrictEqual(mockRecipeStepsData);
+	});
+
+	it("should return undefined when looking for steps for a recipe that has no steps", async () => {
+		const requestedRecipeID = 1234;
+		const requestedSteps = await getMethodFromRecipeID(requestedRecipeID);
+		expect(requestedSteps).toBeUndefined();
 	});
 });
