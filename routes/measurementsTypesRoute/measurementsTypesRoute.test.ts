@@ -1,35 +1,62 @@
 import request from "supertest";
 import app from "../../app";
+import { prismaMock } from "../../singleton";
+import { measurementType } from "@prisma/client";
 
 describe("GET /api/measurementTypes/measurementTypes", () => {
-	describe("successful circumstances", () => {
-		it("GET /api/measurementTypes/measurementTypes", async () => {
-			const response = await request(app).get(
-				"/api/measurementTypes/measurementTypes",
-			);
+	const mockMeasurementTypeData: measurementType[] = [
+		{
+			measurementTypeID: 1,
+			measurementType: "Test 1",
+		},
+		{
+			measurementTypeID: 1,
+			measurementType: "Test 2",
+		},
+	];
 
-			expect(response.statusCode).toBe(200);
-			expect(Array.isArray(response.body)).toBe(true);
-			expect(response.body[0].measurementTypeID).toBeDefined();
-			expect(response.body[0].measurementType).toBeDefined();
-		});
+	beforeEach(() => {
+		prismaMock.measurementType.findMany.mockResolvedValue(
+			mockMeasurementTypeData,
+		);
+	});
+
+	it("should return the mocked measurement type array", async () => {
+		const response = await request(app).get(
+			"/api/measurementTypes/measurementTypes",
+		);
+
+		expect(response.statusCode).toBe(200);
+		expect(typeof response.body).toBe("object");
+		expect(response.body).toStrictEqual({ data: mockMeasurementTypeData });
+		expect(Array.isArray(response.body.data)).toBe(true);
+		expect(response.body.data).toStrictEqual(mockMeasurementTypeData);
 	});
 });
 
-describe("GET /api/measurementTypes/add/:measurementType", () => {
+describe("POST /api/measurementTypes/add/:measurementType", () => {
+	const mockMeasurementType: measurementType = {
+		measurementTypeID: 1,
+		measurementType: "Kilograms",
+	};
+
+	beforeEach(() => {
+		prismaMock.measurementType.create.mockResolvedValue(mockMeasurementType);
+	});
 	describe("successful circumstances", () => {
-		it("GET /api/measurementTypes/add/:measurementType", async () => {
+		it("should return the added measurement type", async () => {
 			const measurementType = "Kilograms";
 			const response = await request(app).post(
 				"/api/measurementTypes/add/" + measurementType,
 			);
 
 			expect(response.statusCode).toBe(201);
+			expect(response.body).toStrictEqual({ data: mockMeasurementType });
 		});
 	});
 
 	describe("unsuccessful circumstances", () => {
-		it("GET /api/measurementTypes/add/:measurementType", async () => {
+		it("should return 404 as a lack of parameter will fail to find the route", async () => {
 			const measurementType = "";
 			const response = await request(app).post(
 				"/api/measurementTypes/add/" + measurementType,

@@ -1,7 +1,6 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+import { getAllMeasurementTypes, addNewMeasurementType } from "./";
 
-const prisma = new PrismaClient();
 let router = express.Router();
 
 /**
@@ -35,27 +34,57 @@ let router = express.Router();
  *                         example: Teaspoon
  */
 router.route("/measurementTypes").get(async (request, result) => {
-	const allMeasurements = await prisma.measurementType.findMany();
-	result.json(allMeasurements);
+	const allMeasurements = await getAllMeasurementTypes();
+	result.json({ data: allMeasurements });
 });
 
+/**
+ * @swagger
+ * /api/measurementTypes/add/{measurementType}:
+ *   post:
+ *     summary: Adds a new measurement type
+ *     description: Used to add a measurement type into the measurementType table
+ *     tags:
+ *       - Measurement Types
+ *     parameters:
+ *       - in: path
+ *         name: measurementType
+ *         required: true
+ *         description: The measurement type to be added
+ *         schema:
+ *           type: string
+ *     responses:
+ *       201:
+ *         description: The added measurement type
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   measurementTypeID:
+ *                     type: integer
+ *                     description: The measurementTypeID.
+ *                     example: 1
+ *                   measurementType:
+ *                     type: string
+ *                     description: The measurement type added
+ *                     example: Kilograms
+ */
 router.route("/add/:measurementType").post(async (request, result) => {
-	const measurementType = request.params.measurementType;
-
 	try {
-		if (measurementType === "") {
-			throw "Measurement type cannot be null or empty";
-		} else {
-			const newMeasurementType = await prisma.measurementType.create({
-				data: {
-					measurementType: measurementType,
-				},
-			});
+		const measurementType = request.params.measurementType;
+
+		const newMeasurementType = await addNewMeasurementType(measurementType);
+
+		if (newMeasurementType) {
 			result.status(201);
-			result.json(newMeasurementType);
+			result.json({ data: newMeasurementType });
+		} else {
+			throw "Measurement type is not valid";
 		}
 	} catch (error) {
-		result.status(401);
+		result.status(400);
 		result.json(error);
 	}
 });
