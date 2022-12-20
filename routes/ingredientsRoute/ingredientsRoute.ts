@@ -51,7 +51,7 @@ router.route("/ingredients").get(async (request, result) => {
  * /api/ingredients/add/{ingredientName}/{ingredientDescription}/{ingredientInfoURL}:
  *   post:
  *     summary: Adds a new ingredient
- *     description: Used to add an ingredient to the database. YET TO BE COMPLETED
+ *     description: Used to add an ingredient to the ingredients table
  *     tags:
  *       - Ingredients
  *     parameters:
@@ -75,7 +75,7 @@ router.route("/ingredients").get(async (request, result) => {
  *           type: integer
  *     responses:
  *       201:
- *         description: All the ingredients in the system
+ *         description: The added ingredient
  *         content:
  *           application/json:
  *             schema:

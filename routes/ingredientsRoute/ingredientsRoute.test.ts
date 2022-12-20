@@ -34,7 +34,7 @@ describe("GET /api/ingredients/ingredients", () => {
 	});
 });
 
-describe("POST /api/ingredients/add/:ingredientName-:ingredientDescription-:ingredientInfoURL", () => {
+describe("POST /api/ingredients/add/:ingredientName/:ingredientDescription/:ingredientInfoURL", () => {
 	const mockIngredient: Ingredients = {
 		ingredientID: 1,
 		ingredientName: "Test 1",
