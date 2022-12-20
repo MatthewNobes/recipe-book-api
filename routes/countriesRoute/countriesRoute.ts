@@ -2,7 +2,6 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { addNewCountry, getCountryByID, getAllCountries } from "./";
 
-const prisma = new PrismaClient();
 let router = express.Router();
 
 /**
