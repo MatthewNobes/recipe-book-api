@@ -8,6 +8,7 @@
 		"build": "tsc --build",
 		"clean": "tsc --build --clean",
 		"test": "jest --watch",
+		"ci-test": "jest",
 		"prisma-pull": "prisma db pull",
 		"prisma-generate": "prisma generate",
 		"lint": "eslint --fix",
