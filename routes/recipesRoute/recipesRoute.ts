@@ -1,14 +1,11 @@
-// file deepcode ignore ComparisonToNaN: its fucking annoying
 import express from "express";
-import { PrismaClient } from "@prisma/client";
-import { getRecipeFromID } from "./";
+import { getRecipeByID, addRecipe, getAllRecipes } from "./";
 
-const prisma = new PrismaClient();
 let recipeRouter = express.Router();
 
 /**
  * @swagger
- * /api/recipes/allRecipes:
+ * /api/recipes/recipes:
  *   get:
  *     summary: Retrieve all the recipes
  *     description: Retrieve all the recipes in the system
@@ -59,10 +56,22 @@ let recipeRouter = express.Router();
  *                         type: string
  *                         description: The source the recipe came from
  *                         example: https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils
+ *                 		 catagoryID:
+ *                   		 type: integer
+ *                   		 description: The ID of the recipes category
+ *                   		 example: 5
+ *                 		 countryID:
+ *                   		 type: integer
+ *                   		 description: The ID of the recipes country
+ *                   		 example: 5
+ *                 		 regionID:
+ *                   		 type: integer
+ *                   		 description: The id of the recipes region
+ *                   		 example: 5
  */
-recipeRouter.route("/allRecipes").get(async (request, result) => {
-	const allRecipes = await prisma.recipes.findMany();
-	result.json(allRecipes);
+recipeRouter.route("/recipes").get(async (request, result) => {
+	const allRecipes = await getAllRecipes();
+	result.json({ data: allRecipes });
 });
 
 /**
@@ -120,72 +129,39 @@ recipeRouter.route("/allRecipes").get(async (request, result) => {
  *                   type: string
  *                   description: The source the recipe came from
  *                   example: https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils
- *                 Ingredients:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       ingredientMeasurementID:
- *                         type: integer
- *                         description: The ingredient measurement ID
- *                         example: 1
- *                       ingredient:
- *                         type: array
- *                         items:
- *                           type: object
- *                           properties:
- *                             ingredientID:
- *                               type: integer
- *                               description: The ingredient ID
- *                               example: 1
- *                             ingredientName:
- *                               type: string
- *                               description: The ingredient name of the ingredient
- *                               example: Turmeric
- *                             ingredientDescription:
- *                               type: string
- *                               description: The description of the ingredient
- *                               example: Turmeric powder has a warm, bitter, black pepper-like flavor and earthy, mustard-like aroma.
- *                             ingredientInfoURL:
- *                               type: string
- *                               description: The url to find more information about the ingredient
- *                               example: https://en.wikipedia.org/wiki/Turmeric
- *                       measurementSize:
- *                         type: string
- *                         description: The amount of the ingredient required
- *                         example: 500
- *                       measurementType:
- *                         type: object
- *                         properties:
- *                           measurementTypeID:
- *                             type: integer
- *                             description: The measurement type ID
- *                             example: 1
- *                           measurementType:
- *                             type: string
- *                             description: The measurement type
- *                             example: Grams
+ *                 catagoryID:
+ *                   type: integer
+ *                   description: The ID of the recipes category
+ *                   example: 5
+ *                 countryID:
+ *                   type: integer
+ *                   description: The ID of the recipes country
+ *                   example: 5
+ *                 regionID:
+ *                   type: integer
+ *                   description: The id of the recipes region
+ *                   example: 5
  */
 recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
 	const requestedRecipeID = parseInt(request.params.recipeID);
 
 	try {
-		const recipe = await getRecipeFromID(requestedRecipeID);
+		const recipe = await getRecipeByID(requestedRecipeID);
 
-		if (recipe) {
-			result.json(recipe);
+		if (recipe && recipe.RecipeID === requestedRecipeID) {
+			result.json({ data: recipe });
 		} else {
-			throw "recipe not found";
+			throw "no recipe found";
 		}
 	} catch (error) {
-		console.log(error);
-		result.sendStatus(400);
+		result.status(400);
+		result.json({ data: error });
 	}
 });
 
 /**
  * @swagger
- * /api/recipes/add-recipe/{recipeName}-{recipeDescription}-{recipeDifficultyRating}-{recipePrepTime}-{recipeCookTime}-{servingNumber}-{recipeSource}:
+ * /api/recipes/add-recipe/{recipeName}-{recipeDescription}-{recipeDifficultyRating}-{recipePrepTime}-{recipeCookTime}-{servingNumber}-{recipeSource}-{catagoryID}-{countryID}-{regionID}:
  *   post:
  *     summary: Adds a new recipe
  *     description: Used to add a new recipe to the system.
@@ -231,22 +207,83 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
  *       - in: path
  *         name: recipeSource
  *         required: false
- *         description: The source the recipe comes from
+ *         description: The encoded source of the recipe, URL's must be encoded as / will cause it to fail to find the route
  *         schema:
  *           type: string
+ *       - in: path
+ *         name: catagoryID
+ *         required: false
+ *         description: The ID of the category this recipe lies within
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: countryID
+ *         required: false
+ *         description: The ID of the country this recipe is from
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: regionID
+ *         required: false
+ *         description: The ID of the region this recipe lies within
+ *         schema:
+ *           type: integer
  *     responses:
  *       201:
- *         description: The specified recipe
+ *         description: The created recipe
  *         content:
  *           application/json:
  *             schema:
- *               type: string
- *               value: "Recipe added"
- *
+ *               type: object
+ *               properties:
+ *                 RecipeID:
+ *                   type: integer
+ *                   description: The recipes ID.
+ *                   example: 1
+ *                 RecipeName:
+ *                   type: string
+ *                   description: The name of the recipe.
+ *                   example: Roast Chicken
+ *                 RecipeDecsription:
+ *                   type: string
+ *                   description: The description of the recipe.
+ *                   example: A nice roasted chicken with roast potatoes
+ *                 RecipeDifficultyRating:
+ *                   type: integer
+ *                   description: The rating of difficulty the recipes is deemed out of ten
+ *                   example: 5
+ *                 RecipePrepTime:
+ *                   type: string
+ *                   description: The time required to prepare for this recipe
+ *                   example: 0:30
+ *                 RecipeCookTime:
+ *                   type: string
+ *                   description: The description of the recipe.
+ *                   example: 1:10
+ *                 ServingNumber:
+ *                   type: integer
+ *                   description: The number of people this will serve
+ *                   example: 4
+ *                 RecipeSource:
+ *                   type: string
+ *                   description: The source the recipe came from
+ *                   example: https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils
+ *                 catagoryID:
+ *                   type: integer
+ *                   description: The ID of the recipes category
+ *                   example: 5
+ *                 countryID:
+ *                   type: integer
+ *                   description: The ID of the recipes country
+ *                   example: 3
+ *                 regionID:
+ *                   type: integer
+ *                   description: The ID of the region
+ *                   example: 2
  */
 recipeRouter
 	.route(
-		"/add-recipe/:recipeName-:recipeDescription-:recipeDifficultyRating-:recipePrepTime-:recipeCookTime-:servingNumber-:recipeSource",
+		"/add/:recipeName/:recipeDescription/:recipeDifficultyRating/:recipePrepTime/:recipeCookTime/:servingNumber/:recipeSource/:catagoryID/:countryID/:regionID",
 	)
 	.post(async (request, result) => {
 		const recipeName = request.params.recipeName;
@@ -258,42 +295,33 @@ recipeRouter
 		const recipeCookTime = request.params.recipeCookTime;
 		const servingNumber = parseInt(request.params.servingNumber);
 		const recipeSource = request.params.recipeSource;
+		const categoryID = parseInt(request.params.catagoryID);
+		const countryID = parseInt(request.params.countryID);
+		const regionID = parseInt(request.params.regionID);
 
-		if (
-			recipeName === "" ||
-			recipeDescription === "" ||
-			Number.isNaN(recipeDifficultyRating) ||
-			recipePrepTime === "" ||
-			recipeCookTime === ""
-		) {
-			result.json("ERROR 1: Some required recipe parameters are missing");
-		} else if (
-			recipeName.length > 255 ||
-			recipeDescription.length > 1024 ||
-			recipeSource.length > 512
-		) {
-			result.json(
-				"ERROR 2: Some recipe parameters exceed the maximum allowed size",
+		try {
+			const newRecipe = await addRecipe(
+				recipeName,
+				recipeDescription,
+				servingNumber,
+				recipeDifficultyRating,
+				recipePrepTime,
+				recipeCookTime,
+				recipeSource,
+				categoryID,
+				countryID,
+				regionID,
 			);
-		} else {
-			try {
-				const newRecipe = await prisma.recipes.create({
-					data: {
-						RecipeName: recipeName,
-						RecipeDecsription: recipeDescription,
-						RecipeDifficultyRating: recipeDifficultyRating,
-						RecipePrepTime: recipePrepTime,
-						RecipeCookTime: recipeCookTime,
-						ServingNumber: servingNumber,
-						RecipeSource: recipeSource,
-					},
-				});
+
+			if (newRecipe) {
 				result.status(201);
-				result.json(newRecipe);
-			} catch (error) {
-				result.status(400);
-				result.json(error);
+				result.json({ data: newRecipe });
+			} else {
+				throw "invalid parameters";
 			}
+		} catch (error) {
+			result.status(400);
+			result.json({ data: error });
 		}
 	});
 
