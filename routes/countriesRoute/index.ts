@@ -1,3 +1,4 @@
 import { getAllCountries } from "./getAllCountries/getAllCountries";
-
-export { getAllCountries };
+import { getCountryByID } from "./getCountryByID/getCountryByID";
+import { addNewCountry } from "./addNewCountry/addNewCountry";
+export { getAllCountries, getCountryByID, addNewCountry };

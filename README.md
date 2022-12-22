@@ -65,6 +65,15 @@ testing suite. An NPM command has been setup for this:
 npm test
 ```
 
+#### DB Mocking
+
+The database has been mocked for unit testing using the singleton method
+recommended by Primsa. For more information on how this was setup visit the
+Prisma unit testing guide
+[Prisma unit testing guide](https://www.prisma.io/docs/guides/testing/unit-testing).
+This will allow for unit tests to be carried out without the database as a
+dependency, allowing for CI & CD pipelines to be added.
+
 ## Deployment
 
 This API has been setup with Docker support from the outset. An image of this

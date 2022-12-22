@@ -1,24 +1,40 @@
 import { deleteRecipesInstructions } from "./deleteRecipesInstructions";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prismaMock } from "../../../singleton";
+import { Count } from "../../../interfaces";
 
 describe("deleteRecipesInstructions", () => {
-	beforeEach(async () => {
-		const newInstruction = await prisma.recipeSteps.create({
-			data: {
-				recipeID: 9,
-				stepNumber: 3,
-				stepText: "testing",
-			},
+	describe("successful deletes", () => {
+		const mockCount: Count = {
+			count: 10,
+		};
+
+		beforeEach(() => {
+			prismaMock.recipeSteps.deleteMany.mockResolvedValue(mockCount);
+		});
+		it("should return a count object containing count: 10", async () => {
+			const deletedInstructionsCount = await deleteRecipesInstructions(1);
+
+			if (deletedInstructionsCount) {
+				expect(typeof deletedInstructionsCount).toBe("object");
+				expect(deletedInstructionsCount.count).toBe(10);
+			}
 		});
 	});
-	it("successful circumstance", async () => {
-		const deletedInstructions = await deleteRecipesInstructions(9);
+	describe("unsuccessful deletes", () => {
+		const mockCount: Count = {
+			count: 0,
+		};
 
-		if (deletedInstructions) {
-			expect(typeof deletedInstructions).toBe("object");
-			expect(deletedInstructions.count).toBeDefined();
-		}
+		beforeEach(() => {
+			prismaMock.recipeSteps.deleteMany.mockResolvedValue(mockCount);
+		});
+		it("should return a count object containing count: 0, as nothing was deleted", async () => {
+			const deletedInstructionsCount = await deleteRecipesInstructions(1);
+
+			if (deletedInstructionsCount) {
+				expect(typeof deletedInstructionsCount).toBe("object");
+				expect(deletedInstructionsCount.count).toBe(0);
+			}
+		});
 	});
 });

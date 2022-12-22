@@ -1,18 +1,19 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
-import { doesRecipeExist } from "../recipesRoute";
 import {
 	getMethodFromRecipeID,
 	deleteRecipesInstructions,
-	getInstructionFromRecipeStepID,
+	getStepFromRecipeStepID,
+	addNewStep,
+	deleteStep,
+	updateStepText,
+	updateStepNumber,
 } from "./";
 
-const prisma = new PrismaClient();
 let methodRouter = express.Router();
 
 /**
  * @swagger
- * /api/method/recipesMethod/{recipeID}:
+ * /api/method/method/{recipeID}:
  *   get:
  *     summary: Retrieve a recipes method
  *     description: Retrieve a recipes method from its recipeID.
@@ -55,18 +56,18 @@ let methodRouter = express.Router();
  *                         description: The recipes ID.
  *                         example: 1
  */
-methodRouter.route("/recipesMethod/:recipeID").get(async (request, result) => {
+methodRouter.route("/method/:recipeID").get(async (request, result) => {
 	const requestedRecipeID = parseInt(request.params.recipeID);
 
 	try {
 		const method = await getMethodFromRecipeID(requestedRecipeID);
 
-		if (method) {
-			if (method.length >= 1) {
-				result.json({ data: method });
-			} else {
-				throw "no method found";
-			}
+		if (
+			method &&
+			method.length >= 1 &&
+			method[0].recipeID === requestedRecipeID
+		) {
+			result.json({ data: method });
 		} else {
 			throw "no method found";
 		}
@@ -78,10 +79,10 @@ methodRouter.route("/recipesMethod/:recipeID").get(async (request, result) => {
 
 /**
  * @swagger
- * /api/method/instruction/{recipeStepID}:
+ * /api/method/step/{recipeStepID}:
  *   get:
- *     summary: Retrieve a specific instruction
- *     description: Retrieve a specific recipe instruction
+ *     summary: Retrieve a specific step
+ *     description: Retrieve a specific recipe step
  *     tags:
  *       - Method
  *     parameters:
@@ -119,28 +120,26 @@ methodRouter.route("/recipesMethod/:recipeID").get(async (request, result) => {
  *                       description: The recipes ID.
  *                       example: 1
  */
-methodRouter
-	.route("/instruction/:recipeStepID")
-	.get(async (request, result) => {
-		const recipeStepID = parseInt(request.params.recipeStepID);
+methodRouter.route("/step/:recipeStepID").get(async (request, result) => {
+	const recipeStepID = parseInt(request.params.recipeStepID);
 
-		try {
-			const method = await getInstructionFromRecipeStepID(recipeStepID);
+	try {
+		const method = await getStepFromRecipeStepID(recipeStepID);
 
-			if (method) {
-				result.json({ data: method });
-			} else {
-				throw "no instruction found";
-			}
-		} catch (error) {
-			result.status(400);
-			result.json({ data: error });
+		if (method && method.recipeStepID === recipeStepID) {
+			result.json({ data: method });
+		} else {
+			throw "no steps found";
 		}
-	});
+	} catch (error) {
+		result.status(400);
+		result.json({ data: error });
+	}
+});
 
 /**
  * @swagger
- * /api/method/add/{recipeID}/{stepNumber}/{stepText}:
+ * /api/method/step/add/{recipeID}/{stepNumber}/{stepText}:
  *   post:
  *     summary: Adds a new instruction
  *     description: Adds a new recipe instruction with an associated recipe ID and step number
@@ -194,41 +193,20 @@ methodRouter
  *                       example: 1
  */
 methodRouter
-	.route("/add/:recipeID/:stepNumber/:stepText")
+	.route("/step/add/:recipeID/:stepNumber/:stepText")
 	.post(async (request, result) => {
 		const recipeID: number = parseInt(request.params.recipeID);
 		const stepNumber: number = parseInt(request.params.stepNumber);
 		const stepText: string = request.params.stepText;
 
 		try {
-			if (
-				Number.isNaN(recipeID) ||
-				Number.isNaN(stepNumber) ||
-				stepText === ""
-			) {
-				throw "parameters must be valid";
-			}
-			if (stepText.length > 2048) {
-				throw "step text exceeds max length";
-			}
-			const recipeExist = await doesRecipeExist(recipeID);
-			if (!recipeExist) {
-				throw "the recipeID does not exist";
-			}
-			if (stepNumber <= 0) {
-				throw "invalid step number";
-			} else {
-				const newInstruction = await prisma.recipeSteps.create({
-					data: {
-						recipeID: recipeID,
-						stepNumber: stepNumber,
-						stepText: stepText,
-					},
-				});
+			const newStep = await addNewStep(stepText, stepNumber, recipeID);
 
-				result.status(201);
-				result.json({ data: newInstruction });
+			if (newStep === undefined) {
+				throw "Invalid parameters";
 			}
+			result.status(201);
+			result.json({ data: newStep });
 		} catch (error) {
 			result.status(400);
 			result.json({ data: error });
@@ -237,7 +215,7 @@ methodRouter
 
 /**
  * @swagger
- * /api/method/instruction/{recipeStepID}:
+ * /api/method/delete/{recipeStepID}:
  *   delete:
  *     summary: Removes a specific instruction
  *     description: Removes a specific recipe instruction
@@ -279,19 +257,17 @@ methodRouter
  *                       example: 1
  */
 methodRouter
-	.route("/instruction/:recipeStepID")
+	.route("/step/delete/:recipeStepID")
 	.delete(async (request, result) => {
 		const recipeStepID = parseInt(request.params.recipeStepID);
 
 		try {
-			const instructionToDelete = await prisma.recipeSteps.delete({
-				where: { recipeStepID: recipeStepID },
-			});
+			const deletedInstruction = await deleteStep(recipeStepID);
 
-			if (instructionToDelete) {
-				result.json({ data: instructionToDelete });
+			if (deletedInstruction) {
+				result.json({ data: deletedInstruction });
 			} else {
-				throw "no instruction found";
+				throw "invalid recipeStepID";
 			}
 		} catch (error) {
 			result.status(400);
@@ -301,7 +277,7 @@ methodRouter
 
 /**
  * @swagger
- * /api/method/recipe/{recipeID}:
+ * /api/method/method/delete/{recipeID}:
  *   delete:
  *     summary: Removes all the instructions for a recipe
  *     description: Removes all the instructions for a recipe.
@@ -330,26 +306,28 @@ methodRouter
  *                       description: The number of records removed
  *                       example: 1
  */
-methodRouter.route("/recipe/:recipeID").delete(async (request, result) => {
-	const recipeID = parseInt(request.params.recipeID);
+methodRouter
+	.route("/method/delete/:recipeID")
+	.delete(async (request, result) => {
+		const recipeID = parseInt(request.params.recipeID);
 
-	try {
-		const countOfDeletedRecords = await deleteRecipesInstructions(recipeID);
+		try {
+			const countOfDeletedRecords = await deleteRecipesInstructions(recipeID);
 
-		if (countOfDeletedRecords) {
-			result.json({ data: countOfDeletedRecords });
-		} else {
-			throw "no instruction found";
+			if (countOfDeletedRecords && countOfDeletedRecords.count > 0) {
+				result.json({ data: countOfDeletedRecords });
+			} else {
+				throw "invalid parameter";
+			}
+		} catch (error) {
+			result.status(400);
+			result.json({ data: error });
 		}
-	} catch (error) {
-		result.status(400);
-		result.json({ data: error });
-	}
-});
+	});
 
 /**
  * @swagger
- * /api/method/instructionTextUpdate/{recipeStepID}/{stepText}:
+ * /api/method/step/update/stepText/{recipeStepID}/{stepText}:
  *   put:
  *     summary: Update the instruction text
  *     description: Updates the text for an instruction
@@ -397,21 +375,18 @@ methodRouter.route("/recipe/:recipeID").delete(async (request, result) => {
  *                       example: 1
  */
 methodRouter
-	.route("/instructionTextUpdate/:recipeStepID/:stepText")
+	.route("/step/update/stepText/:recipeStepID/:stepText")
 	.put(async (request, result) => {
 		const recipeStepID = parseInt(request.params.recipeStepID);
 		const updatedStepText = request.params.stepText;
 
 		try {
-			const updatedInstruction = await prisma.recipeSteps.update({
-				where: { recipeStepID: recipeStepID },
-				data: { stepText: updatedStepText },
-			});
+			const updatedStep = await updateStepText(updatedStepText, recipeStepID);
 
-			if (updatedInstruction) {
-				result.json({ data: updatedInstruction });
+			if (updatedStep) {
+				result.json({ data: updatedStep });
 			} else {
-				throw "no instruction found";
+				throw "no step found";
 			}
 		} catch (error) {
 			result.status(400);
@@ -421,10 +396,10 @@ methodRouter
 
 /**
  * @swagger
- * /api/method/instructionStepNumber/{recipeStepID}/{stepNumber}:
+ * /step/update/stepNumber/{recipeStepID}/{stepNumber}:
  *   put:
- *     summary: Update the instruction text
- *     description: Updates the text for an instruction
+ *     summary: Update the instruction number
+ *     description: Updates the number for an instruction
  *     tags:
  *       - Method
  *     parameters:
@@ -469,21 +444,21 @@ methodRouter
  *                       example: 1
  */
 methodRouter
-	.route("/instructionStepNumber/:recipeStepID/:stepNumber")
+	.route("/step/update/stepNumber/:recipeStepID/:stepNumber")
 	.put(async (request, result) => {
 		const recipeStepID = parseInt(request.params.recipeStepID);
 		const updatedStepNumber = parseInt(request.params.stepNumber);
 
 		try {
-			const updatedInstruction = await prisma.recipeSteps.update({
-				where: { recipeStepID: recipeStepID },
-				data: { stepNumber: updatedStepNumber },
-			});
+			const updatedStep = await updateStepNumber(
+				updatedStepNumber,
+				recipeStepID,
+			);
 
-			if (updatedInstruction) {
-				result.json({ data: updatedInstruction });
+			if (updatedStep) {
+				result.json({ data: updatedStep });
 			} else {
-				throw "no instruction found";
+				throw "no step found";
 			}
 		} catch (error) {
 			result.status(400);

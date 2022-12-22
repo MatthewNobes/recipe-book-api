@@ -1,23 +1,21 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../../client";
+import { RecipeSteps } from "@prisma/client";
 
-const prisma = new PrismaClient();
-
-interface RecipeStep {
-	recipeStepID: number;
-	stepNumber: number;
-	stepText: string;
-	recipeID: number;
-}
-
-export const getMethodFromRecipeID = async (requestedRecipeID: number) => {
-	const steps = await prisma.recipeSteps.findMany({
+/**
+ * Gets a full method for a recipe, from its recipe ID.
+ * @param requestedRecipeID The requested recipe ID
+ * @returns Promise<RecipeSteps[] | undefined> Either an array of recipe objects or undefined if no records can be found
+ */
+export const getMethodFromRecipeID = async (
+	requestedRecipeID: number,
+): Promise<RecipeSteps[] | undefined> => {
+	const recipeSteps = await prisma.recipeSteps.findMany({
 		where: { recipeID: requestedRecipeID },
 	});
 
-	if (steps) {
-		const methodObj: RecipeStep[] = steps;
-		return methodObj;
+	if (recipeSteps.length > 1 && recipeSteps[0].recipeID === requestedRecipeID) {
+		return recipeSteps;
+	} else {
+		return undefined;
 	}
-
-	return null;
 };

@@ -1,210 +1,307 @@
 import request from "supertest";
 import app from "../../app";
+import { prismaMock } from "../../singleton";
+import { RecipeSteps } from "@prisma/client";
+import { Count } from "../../interfaces";
 
-describe("GET /api/method/recipesMethod/:recipeID", () => {
-	describe("successful circumstances", () => {
-		it("GET /api/method/recipesMethod/:recipeID", async () => {
-			const recipeID = 1;
-			const response = await request(app).get(
-				"/api/method/recipesMethod/" + recipeID,
-			);
+describe("GET /api/method/method/:recipeID", () => {
+	const mockRecipeStepsData: RecipeSteps[] = [
+		{
+			recipeStepID: 1,
+			stepNumber: 1,
+			stepText: "Test 1",
+			recipeID: 1,
+		},
+		{
+			recipeStepID: 2,
+			stepNumber: 2,
+			stepText: "Test 2",
+			recipeID: 1,
+		},
+	];
 
-			expect(response.statusCode).toBe(200);
-			expect(typeof response.body.data[0].recipeID).toBe("number");
-			expect(typeof response.body.data[0].recipeStepID).toBe("number");
-			expect(typeof response.body.data[0].stepNumber).toBe("number");
-			expect(typeof response.body.data[0].stepText).toBe("string");
-		});
+	beforeEach(() => {
+		prismaMock.recipeSteps.findMany.mockResolvedValue(mockRecipeStepsData);
 	});
 
-	describe("unsuccessful circumstances", () => {
-		it("GET /api/method/recipesMethod/:recipeID", async () => {
-			const recipeID = 0;
-			const response = await request(app).get(
-				"/api/method/recipesMethod/" + recipeID,
-			);
+	it("should return the requested mock steps array", async () => {
+		const recipeID = 1;
+		const response = await request(app).get("/api/method/method/" + recipeID);
 
-			expect(response.statusCode).toBe(400);
-			expect(response.body.data).toBe("no method found");
-		});
-	});
-});
-
-describe("GET /api/method/instruction/:recipeStepID", () => {
-	describe("successful circumstances", () => {
-		it("GET /api/method/instruction/:recipeStepID", async () => {
-			const recipeStepID = 1;
-			const response = await request(app).get(
-				"/api/method/instruction/" + recipeStepID,
-			);
-
-			expect(response.statusCode).toBe(200);
-			expect(typeof response.body.data.recipeID).toBe("number");
-			expect(typeof response.body.data.recipeStepID).toBe("number");
-			expect(typeof response.body.data.stepNumber).toBe("number");
-			expect(typeof response.body.data.stepText).toBe("string");
-		});
+		expect(response.statusCode).toBe(200);
+		expect(typeof response.body).toBe("object");
+		expect(response.body).toStrictEqual({ data: mockRecipeStepsData });
 	});
 
-	describe("unsuccessful circumstances", () => {
-		it("GET /api/method/instruction/:recipeStepID", async () => {
-			const recipeStepID = 0;
-			const response = await request(app).get(
-				"/api/method/instruction/" + recipeStepID,
-			);
+	it("should return `no method found` when asked for a recipe that has no steps", async () => {
+		const recipeID = 888888;
+		const response = await request(app).get("/api/method/method/" + recipeID);
 
-			expect(response.statusCode).toBe(400);
-			expect(response.body.data).toBe("no instruction found");
-		});
+		expect(response.statusCode).toBe(400);
+
+		expect(typeof response.body.data).toBe("string");
+		expect(response.body.data).toBe("no method found");
 	});
 });
 
-describe("POST /api/method/add/:recipeID/:stepNumber/:stepText", () => {
+describe("GET /api/method/step/:recipeStepID", () => {
+	const mockRecipeStepsData: RecipeSteps = {
+		recipeStepID: 1,
+		stepNumber: 1,
+		stepText: "Test 1",
+		recipeID: 1,
+	};
+
+	beforeEach(() => {
+		prismaMock.recipeSteps.findFirst.mockResolvedValue(mockRecipeStepsData);
+	});
+
+	it("should return the requested mock step", async () => {
+		const recipeStepID = 1;
+		const response = await request(app).get("/api/method/step/" + recipeStepID);
+
+		expect(response.statusCode).toBe(200);
+		expect(typeof response.body).toBe("object");
+		expect(response.body).toStrictEqual({ data: mockRecipeStepsData });
+	});
+
+	it("should return `no steps found` when asked for a recipe that has no steps", async () => {
+		const recipeStepID = 888888;
+		const response = await request(app).get("/api/method/step/" + recipeStepID);
+
+		expect(response.statusCode).toBe(400);
+
+		expect(typeof response.body.data).toBe("string");
+		expect(response.body.data).toBe("no steps found");
+	});
+});
+
+describe("POST /api/method/step/add/:recipeID/:stepNumber/:stepText", () => {
+	const mockRecipeStepsData: RecipeSteps = {
+		recipeStepID: 1,
+		stepNumber: 3,
+		stepText: "Step 1",
+		recipeID: 1,
+	};
+
+	beforeEach(() => {
+		prismaMock.recipeSteps.create.mockResolvedValue(mockRecipeStepsData);
+	});
 	describe("successful circumstances", () => {
-		let addedID = 0;
-		afterEach(async () => {
-			const response = await request(app).delete(
-				"/api/method/instruction/" + addedID,
-			);
-		});
-		it("All conditions valid", async () => {
+		it("should return the added recipe step, Step 1, with the instruction number 3", async () => {
+			const stepText = "Step 1";
+			const stepNumber = 3;
 			const recipeID = 1;
-			const stepNumber = 1;
-			const stepText = "Boil the kettle";
+
 			const response = await request(app).post(
-				"/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText,
+				"/api/method/step/add/" + recipeID + "/" + stepNumber + "/" + stepText,
 			);
 
 			expect(response.statusCode).toBe(201);
-			expect(typeof response.body.data.recipeID).toBe("number");
-			expect(typeof response.body.data.recipeStepID).toBe("number");
 			expect(typeof response.body.data.stepNumber).toBe("number");
 			expect(typeof response.body.data.stepText).toBe("string");
-
-			addedID = response.body.data.recipeStepID;
+			expect(typeof response.body.data.recipeID).toBe("number");
+			expect(typeof response.body.data.recipeStepID).toBe("number");
+			expect(response.body).toStrictEqual({ data: mockRecipeStepsData });
 		});
 	});
 
 	describe("unsuccessful circumstances", () => {
-		it("invalid step number", async () => {
+		it("should return 404 as a lack of parameter will fail to find the route", async () => {
+			const stepText = "";
+			const stepNumber = 3;
 			const recipeID = 1;
-			const stepNumber = 0;
-			const stepText = "Boil the kettle";
+
 			const response = await request(app).post(
-				"/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText,
+				"/api/method/step/add/" + recipeID + "/" + stepNumber + "/" + stepText,
 			);
 
-			expect(response.statusCode).toBe(400);
-			expect(response.body.data).toBe("invalid step number");
-		});
-
-		it("invalid recipeID", async () => {
-			const recipeID = 0;
-			const stepNumber = 1;
-			const stepText = "Boil the kettle";
-			const response = await request(app).post(
-				"/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText,
-			);
-
-			expect(response.statusCode).toBe(400);
-			expect(response.body.data).toBe("the recipeID does not exist");
+			expect(response.statusCode).toBe(404);
 		});
 	});
 });
 
-describe("DELETE /api/method/instruction/:recipeStepID", () => {
-	let activeID = 0;
-	beforeEach(async () => {
-		const recipeID = 1;
-		const stepNumber = 1;
-		const stepText = "Boil the kettle";
-		const response = await request(app).post(
-			"/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText,
-		);
-
-		activeID = await response.body.data.recipeStepID;
-	});
+describe("DELETE /api/method/step/delete/:recipeStepID", () => {
 	describe("successful circumstances", () => {
-		it("Valid recipeStepID", async () => {
+		const mockRecipeStepsData: RecipeSteps = {
+			recipeStepID: 1,
+			stepNumber: 3,
+			stepText: "Step 1",
+			recipeID: 1,
+		};
+
+		beforeEach(() => {
+			prismaMock.recipeSteps.delete.mockResolvedValue(mockRecipeStepsData);
+		});
+		it("should return the deleted step", async () => {
+			const recipeStepID = 1;
+
 			const response = await request(app).delete(
-				"/api/method/instruction/" + activeID,
+				"/api/method/step/delete/" + recipeStepID,
 			);
 
 			expect(response.statusCode).toBe(200);
-			expect(typeof response.body.data.recipeID).toBe("number");
-			expect(typeof response.body.data.recipeStepID).toBe("number");
 			expect(typeof response.body.data.stepNumber).toBe("number");
 			expect(typeof response.body.data.stepText).toBe("string");
+			expect(typeof response.body.data.recipeID).toBe("number");
+			expect(typeof response.body.data.recipeStepID).toBe("number");
+			expect(response.body).toStrictEqual({ data: mockRecipeStepsData });
+		});
+	});
+
+	describe("unsuccessful circumstances", () => {
+		it("should return 404 as a lack of parameter will fail to find the route", async () => {
+			const response = await request(app).delete("/api/method/step/delete/");
+			expect(response.statusCode).toBe(404);
+		});
+
+		it("should return 400 as an invalid recipeStepID will not be able to delete anything", async () => {
+			const recipeStepID = 0;
+
+			const response = await request(app).delete(
+				"/api/method/step/delete/" + recipeStepID,
+			);
+			expect(response.statusCode).toBe(400);
+			expect(response.body).toStrictEqual({ data: "invalid recipeStepID" });
 		});
 	});
 });
 
-describe("DELETE /api/method/recipe/:recipeID", () => {
-	const recipeID = 1000;
-	beforeEach(async () => {
-		let activeID = 0;
-		const stepNumber = 1;
-		const stepText = "Boil the kettle";
-		const response = await request(app).post(
-			"/api/method/add/" + recipeID + "/" + stepNumber + "/" + stepText,
-		);
-
-		activeID = await response.body.data.recipeStepID;
-	});
+describe("DELETE /api/method/method/delete/:recipeID", () => {
 	describe("successful circumstances", () => {
-		it("Should return a count of the number of records that were deleted", async () => {
-			const response = await request(app).delete(
-				"/api/method/recipe/" + recipeID,
-			);
-			expect(response.statusCode).toBe(200);
-			expect(typeof response.body.data.count).toBe("number");
+		const mockCount: Count = {
+			count: 5,
+		};
+
+		beforeEach(() => {
+			prismaMock.recipeSteps.deleteMany.mockResolvedValue(mockCount);
 		});
-		it("Should have emptied the recipeStep table of all records with a recipeID of 1000", async () => {
-			const recipeID = 1000;
-			const response = await request(app).get(
-				"/api/method/recipesMethod/" + recipeID,
+
+		it("should return the count of deleted steps", async () => {
+			const recipeID = 1;
+
+			const response = await request(app).delete(
+				"/api/method/method/delete/" + recipeID,
+			);
+
+			expect(response.statusCode).toBe(200);
+			expect(typeof response.body.data).toBe("object");
+			expect(typeof response.body).toBe("object");
+			expect(response.body).toStrictEqual({ data: mockCount });
+		});
+	});
+
+	describe("unsuccessful circumstances", () => {
+		const mockCount: Count = {
+			count: 0,
+		};
+
+		beforeEach(() => {
+			prismaMock.recipeSteps.deleteMany.mockResolvedValue(mockCount);
+		});
+
+		it("should return the count of zero if there are no records for the ID", async () => {
+			const recipeID = 0;
+
+			const response = await request(app).delete(
+				"/api/method/method/delete/" + recipeID,
 			);
 
 			expect(response.statusCode).toBe(400);
-			expect(response.body.data).toBe("no method found");
+			expect(typeof response.body.data).toBe("string");
+			expect(typeof response.body).toBe("object");
+			expect(response.body).toStrictEqual({ data: "invalid parameter" });
 		});
 	});
 });
 
 describe("PUT /api/method/instructionTextUpdate/:recipeID/:stepText", () => {
+	const mockRecipeStepsData: RecipeSteps = {
+		recipeStepID: 1,
+		stepNumber: 3,
+		stepText: "Updated text",
+		recipeID: 1,
+	};
+
+	beforeEach(() => {
+		prismaMock.recipeSteps.update.mockResolvedValue(mockRecipeStepsData);
+	});
 	describe("successful circumstances", () => {
-		it("Valid text update conditions valid", async () => {
-			const recipeID = 1;
-			const stepText = "Do something different";
+		it("should return the updated recipe step text", async () => {
+			const updatedStepText = "Updated text";
+			const recipeStepID = 1;
+
 			const response = await request(app).put(
-				"/api/method/instructionTextUpdate/" + recipeID + "/" + stepText,
+				"/api/method/step/update/stepText/" +
+					recipeStepID +
+					"/" +
+					updatedStepText,
 			);
 
 			expect(response.statusCode).toBe(200);
-			expect(typeof response.body.data.recipeID).toBe("number");
-			expect(typeof response.body.data.recipeStepID).toBe("number");
-			expect(typeof response.body.data.stepNumber).toBe("number");
-			expect(typeof response.body.data.stepText).toBe("string");
-			expect(response.body.data.stepText).toBe(stepText);
+			expect(response.body).toStrictEqual({ data: mockRecipeStepsData });
+		});
+	});
+
+	describe("unsuccessful circumstances", () => {
+		it("should return 404 as a lack of parameter will fail to find the route", async () => {
+			const updatedStepText = "";
+			const recipeStepID = 1;
+
+			const response = await request(app).put(
+				"/api/method/step/update/stepText/" +
+					recipeStepID +
+					"/" +
+					updatedStepText,
+			);
+
+			expect(response.statusCode).toBe(404);
 		});
 	});
 });
 
-describe("PUT /api/method/instructionStepNumber/:recipeID/:stepNumber", () => {
+describe("PUT /api/method/step/update/stepNumber/:recipeID/:stepNumber", () => {
+	const mockRecipeStepsData: RecipeSteps = {
+		recipeStepID: 1,
+		stepNumber: 3,
+		stepText: "Updated text",
+		recipeID: 1,
+	};
+
+	beforeEach(() => {
+		prismaMock.recipeSteps.update.mockResolvedValue(mockRecipeStepsData);
+	});
 	describe("successful circumstances", () => {
-		it("Valid text update conditions valid", async () => {
-			const recipeID = 1;
-			const stepNumber = 4;
+		it("should return the updated recipe step number as a step object", async () => {
+			const updatedStepNumber = 3;
+			const recipeStepID = 1;
+
 			const response = await request(app).put(
-				"/api/method/instructionStepNumber/" + recipeID + "/" + stepNumber,
+				"/api/method/step/update/stepNumber/" +
+					recipeStepID +
+					"/" +
+					updatedStepNumber,
 			);
 
 			expect(response.statusCode).toBe(200);
-			expect(typeof response.body.data.recipeID).toBe("number");
-			expect(typeof response.body.data.recipeStepID).toBe("number");
-			expect(typeof response.body.data.stepNumber).toBe("number");
-			expect(typeof response.body.data.stepText).toBe("string");
-			expect(response.body.data.stepNumber).toBe(stepNumber);
+			expect(response.body).toStrictEqual({ data: mockRecipeStepsData });
+		});
+	});
+
+	describe("unsuccessful circumstances", () => {
+		it("should return 400 when passed an updatedStepNumber of 0", async () => {
+			const updatedStepNumber = 0;
+			const recipeStepID = 1;
+
+			const response = await request(app).put(
+				"/api/method/step/update/stepNumber/" +
+					recipeStepID +
+					"/" +
+					updatedStepNumber,
+			);
+
+			expect(response.statusCode).toBe(400);
+			expect(response.body).toStrictEqual({ data: "no step found" });
 		});
 	});
 });

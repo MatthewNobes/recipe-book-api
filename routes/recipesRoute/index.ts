@@ -1,3 +1,5 @@
 import { doesRecipeExist } from "./doesRecipeExist/doesRecipeExist";
-import { getRecipeFromID } from "./getRecipeFromID/getRecipeFromID";
-export { doesRecipeExist, getRecipeFromID };
+import { getRecipeByID } from "./getRecipeByID/getRecipeByID";
+import { addRecipe } from "./addRecipe/addRecipe";
+import { getAllRecipes } from "./getAllRecipes/getAllRecipes";
+export { doesRecipeExist, getRecipeByID, addRecipe, getAllRecipes };

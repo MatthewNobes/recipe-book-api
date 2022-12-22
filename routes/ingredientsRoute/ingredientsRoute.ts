@@ -1,7 +1,6 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+import { getAllIngredients, addNewIngredient } from "./";
 
-const prisma = new PrismaClient();
 let router = express.Router();
 
 /**
@@ -43,16 +42,16 @@ let router = express.Router();
  *                         example: 5
  */
 router.route("/ingredients").get(async (request, result) => {
-	const allIngredients = await prisma.ingredients.findMany();
-	result.json(allIngredients);
+	const allIngredients = await getAllIngredients();
+	result.json({ data: allIngredients });
 });
 
 /**
  * @swagger
- * /api/ingredients/add-ingredient/{ingredientName}-{ingredientDescription}-{ingredientInfoURL}:
+ * /api/ingredients/add/{ingredientName}/{ingredientDescription}/{ingredientInfoURL}:
  *   post:
  *     summary: Adds a new ingredient
- *     description: Used to add an ingredient to the database. YET TO BE COMPLETED
+ *     description: Used to add an ingredient to the ingredients table
  *     tags:
  *       - Ingredients
  *     parameters:
@@ -76,7 +75,7 @@ router.route("/ingredients").get(async (request, result) => {
  *           type: integer
  *     responses:
  *       201:
- *         description: All the ingredients in the system
+ *         description: The added ingredient
  *         content:
  *           application/json:
  *             schema:
@@ -101,22 +100,25 @@ router.route("/ingredients").get(async (request, result) => {
  *                     example: 5
  */
 router
-	.route(
-		"/add-ingredient/:ingredientName-:ingredientDescription-:ingredientInfoURL",
-	)
+	.route("/add/:ingredientName/:ingredientDescription/:ingredientInfoURL")
 	.post(async (request, result) => {
 		try {
 			const ingredientName = request.params.ingredientName;
 			const ingredientDescription = request.params.ingredientDescription;
 			const ingredientInfoURL = request.params.ingredientInfoURL;
 
-			if (ingredientName) {
-				//check if ingredient already in system, if not add it here
-				//add to ingredients table
-			}
+			const newIngredient = await addNewIngredient(
+				ingredientName,
+				ingredientDescription,
+				ingredientInfoURL,
+			);
 
-			result.status(201);
-			result.json(ingredientName + ingredientDescription + ingredientInfoURL);
+			if (newIngredient) {
+				result.status(201);
+				result.json({ data: newIngredient });
+			} else {
+				throw "Ingredient name is not valid";
+			}
 		} catch (error) {
 			result.status(400);
 			result.json(error);
