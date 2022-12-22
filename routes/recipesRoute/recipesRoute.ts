@@ -1,7 +1,7 @@
 import express from "express";
 import { getRecipeByID, addRecipe, getAllRecipes } from "./";
 
-let recipeRouter = express.Router();
+const recipeRouter = express.Router();
 
 /**
  * @swagger
@@ -56,18 +56,18 @@ let recipeRouter = express.Router();
  *                         type: string
  *                         description: The source the recipe came from
  *                         example: https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils
- *                 		 catagoryID:
- *                   		 type: integer
- *                   		 description: The ID of the recipes category
- *                   		 example: 5
- *                 		 countryID:
- *                   		 type: integer
- *                   		 description: The ID of the recipes country
- *                   		 example: 5
- *                 		 regionID:
- *                   		 type: integer
- *                   		 description: The id of the recipes region
- *                   		 example: 5
+ *                       catagoryID:
+ *                         type: integer
+ *                         description: The ID of the recipes category
+ *                         example: 5
+ *                       countryID:
+ *                         type: integer
+ *                         description: The ID of the recipes country
+ *                         example: 5
+ *                       regionID:
+ *                         type: integer
+ *                         description: The id of the recipes region
+ *                         example: 5
  */
 recipeRouter.route("/recipes").get(async (request, result) => {
 	const allRecipes = await getAllRecipes();
