@@ -2,6 +2,7 @@ import {
 	Ingredients,
 	measurementType,
 	ingredientMeasurements,
+	RecipeIngredients,
 } from "@prisma/client";
 
 /**
@@ -25,4 +26,23 @@ type IngredientDetails = {
 	measurementType: measurementType["measurementType"];
 };
 
-export { Count, IngredientDetails };
+type FullMeasurements = {
+	ingredientMeasurementID: ingredientMeasurements["ingredientMeasurementID"];
+	measurementSize: ingredientMeasurements["measurementSize"];
+	measurementType: measurementType[];
+	Ingredients: Ingredients[];
+};
+
+type FullIngredientMeasurement = {
+	recipeIngredientsID: RecipeIngredients["recipeIngredientsID"];
+	recipeID: RecipeIngredients["recipeID"];
+	ingredientMeasurementID: ingredientMeasurements["ingredientMeasurementID"];
+	ingredientMeasurements: FullMeasurements[];
+};
+
+export {
+	Count,
+	IngredientDetails,
+	FullIngredientMeasurement,
+	FullMeasurements,
+};
