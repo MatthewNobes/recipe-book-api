@@ -9,7 +9,7 @@ import {
 	updateStepNumber,
 } from "./";
 
-let methodRouter = express.Router();
+const methodRouter = express.Router();
 
 /**
  * @swagger
