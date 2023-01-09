@@ -161,7 +161,7 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
 
 /**
  * @swagger
- * /api/recipes/add-recipe/{recipeName}-{recipeDescription}-{recipeDifficultyRating}-{recipePrepTime}-{recipeCookTime}-{servingNumber}-{recipeSource}-{catagoryID}-{countryID}-{regionID}:
+ * /api/recipes/add/{recipeName}-{recipeDescription}-{recipeDifficultyRating}-{recipePrepTime}-{recipeCookTime}-{servingNumber}-{recipeSource}-{catagoryID}-{countryID}-{regionID}:
  *   post:
  *     summary: Adds a new recipe
  *     description: Used to add a new recipe to the system.
