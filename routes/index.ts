@@ -4,6 +4,7 @@ import measurementsTypesRoute from "./measurementsTypesRoute/measurementsTypesRo
 import methodRouter from "./methodRoute/methodRoute";
 import countriesRouter from "./countriesRoute/countriesRoute";
 import categoriesRouter from "./categoriesRoute/categoriesRoute";
+import regionsRoute from "./regionsRoute/regionsRoute";
 import express from "express";
 const router = express.Router();
 
@@ -13,5 +14,6 @@ router.use("/measurementTypes", measurementsTypesRoute);
 router.use("/method", methodRouter);
 router.use("/countries", countriesRouter);
 router.use("/categories", categoriesRouter);
+router.use("/regions", regionsRoute);
 
 export default router;
