@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllIngredients, addNewIngredient } from "./";
+import { getAllIngredients, addFullIngredient } from "./";
 import { getIngredientsByRecipeID } from "./getIngredientsByRecipeID/getIngredientsByRecipeID";
 
 const router = express.Router();
@@ -142,7 +142,7 @@ router.route("/recipe/:recipeID").get(async (request, result) => {
 
 /**
  * @swagger
- * /api/ingredients/add/{ingredientName}/{ingredientDescription}/{ingredientInfoURL}:
+ * /api/ingredients/add/{ingredientName}/{ingredientDescription}/{ingredientInfoURL}/{recipeID}/{measurementTypeID}/{measurementSize}:
  *   post:
  *     summary: Adds a new ingredient
  *     description: Used to add an ingredient to the ingredients table
@@ -164,7 +164,25 @@ router.route("/recipe/:recipeID").get(async (request, result) => {
  *       - in: path
  *         name: ingredientInfoURL
  *         required: true
- *         description: The recipes difficulty rating
+ *         description: The encoded url for information about the ingredient
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: recipeID
+ *         required: true
+ *         description: The id of the recipe this ingredient is for
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: measurementTypeID
+ *         required: true
+ *         description: The id of the measurement type
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: measurementSize
+ *         required: true
+ *         description: The amount of the ingredient required
  *         schema:
  *           type: integer
  *     responses:
@@ -176,9 +194,21 @@ router.route("/recipe/:recipeID").get(async (request, result) => {
  *               type: object
  *               properties:
  *                 data:
- *                   ingredientID:
+ *                   recipeIngredientID:
  *                     type: integer
- *                     description: The ingredientID.
+ *                     description: The id of the linked ingredient to the recipe
+ *                     example: 1
+ *                   measurementSize:
+ *                     type: integer
+ *                     description: The amount of an ingredient needed
+ *                     example: 230
+ *                   measurementTypeID:
+ *                     type: integer
+ *                     description: The id of the measurement type
+ *                     example: 1
+ *                   recipeID:
+ *                     type: integer
+ *                     description: The id of the recipe the ingredient is linked to
  *                     example: 1
  *                   ingredientName:
  *                     type: string
@@ -191,27 +221,35 @@ router.route("/recipe/:recipeID").get(async (request, result) => {
  *                   ingredientInfoURL:
  *                     type: integer
  *                     description: The URL with information about the ingredient
- *                     example: 5
+ *                     example: https%3A%2F%2Fwww.javascripttutorial.net%2Fjavascript-fetch-api%2F
  */
 router
-	.route("/add/:ingredientName/:ingredientDescription/:ingredientInfoURL")
+	.route(
+		"/add/:ingredientName/:ingredientDescription/:ingredientInfoURL/:recipeID/:measurementTypeID/:measurementSize",
+	)
 	.post(async (request, result) => {
 		try {
 			const ingredientName = request.params.ingredientName;
 			const ingredientDescription = request.params.ingredientDescription;
 			const ingredientInfoURL = request.params.ingredientInfoURL;
+			const recipeID = parseInt(request.params.recipeID);
+			const measurementTypeID = parseInt(request.params.measurementTypeID);
+			const measurementSize = parseInt(request.params.measurementSize);
 
-			const newIngredient = await addNewIngredient(
+			const newIngredient = await addFullIngredient(
 				ingredientName,
 				ingredientDescription,
 				ingredientInfoURL,
+				measurementTypeID,
+				measurementSize,
+				recipeID,
 			);
 
 			if (newIngredient) {
 				result.status(201);
 				result.json({ data: newIngredient });
 			} else {
-				throw "Ingredient name is not valid";
+				throw "Ingredient parameters are not valid";
 			}
 		} catch (error) {
 			result.status(400);
