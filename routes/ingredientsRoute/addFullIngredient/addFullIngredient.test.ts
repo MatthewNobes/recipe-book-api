@@ -2,14 +2,14 @@ import { addFullIngredient } from "./addFullIngredient";
 import { prismaMock } from "../../../singleton";
 import {
 	ingredientMeasurements,
-	Ingredients,
-	RecipeIngredients,
+	ingredients,
+	recipeIngredients,
 } from "@prisma/client";
 
 describe("addFullIngredient", () => {
-	const mockIngredient: Ingredients = {
+	const mockIngredient: ingredients = {
 		ingredientID: 1,
-		ingredientName: "Hello",
+		ingredient: "Hello",
 		ingredientDescription: "Hello world",
 		ingredientInfoURL: "encodedURLhere",
 	};
@@ -21,8 +21,8 @@ describe("addFullIngredient", () => {
 		measurementSize: 23,
 	};
 
-	const mockRecipeIngredients: RecipeIngredients = {
-		recipeIngredientsID: 1,
+	const mockRecipeIngredients: recipeIngredients = {
+		recipeIngredientID: 1,
 		recipeID: 1,
 		ingredientMeasurementID: 1,
 	};

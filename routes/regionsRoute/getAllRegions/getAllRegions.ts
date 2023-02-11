@@ -1,7 +1,7 @@
-import { Regions } from "@prisma/client";
+import { regions } from "@prisma/client";
 import prisma from "../../../client";
 
-export const getAllRegions = async (): Promise<Regions[]> => {
+export const getAllRegions = async (): Promise<regions[]> => {
 	const regions = await prisma.regions.findMany();
 	return regions;
 };

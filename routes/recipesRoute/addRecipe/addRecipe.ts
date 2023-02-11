@@ -1,4 +1,4 @@
-import { Recipes } from "@prisma/client";
+import { recipes } from "@prisma/client";
 import prisma from "../../../client";
 
 export const addRecipe = async (
@@ -12,7 +12,7 @@ export const addRecipe = async (
 	categoryID?: number,
 	countryID?: number,
 	regionID?: number,
-): Promise<Recipes | undefined> => {
+): Promise<recipes | undefined> => {
 	if (
 		recipeName === "" ||
 		servingNumber === 0 ||
@@ -22,14 +22,14 @@ export const addRecipe = async (
 	}
 	const newRecipe = await prisma.recipes.create({
 		data: {
-			RecipeName: recipeName,
-			RecipeDecsription: recipeDescription,
-			RecipeDifficultyRating: recipeDifficultyRating,
-			RecipePrepTime: recipePrepTime,
-			RecipeCookTime: recipeCookTime,
-			ServingNumber: servingNumber,
-			RecipeSource: recipeSource,
-			catagoryID: categoryID,
+			recipeName: recipeName,
+			recipeDescription: recipeDescription,
+			recipeDifficultyRating: recipeDifficultyRating,
+			recipePrepTime: recipePrepTime,
+			recipeCookTime: recipeCookTime,
+			servingNumber: servingNumber,
+			recipeSource: recipeSource,
+			categoryID: categoryID,
 			countryID: countryID,
 			regionID: regionID,
 		},

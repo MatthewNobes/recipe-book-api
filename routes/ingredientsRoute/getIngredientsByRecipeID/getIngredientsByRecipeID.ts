@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import {
-	RecipeIngredients,
+	recipeIngredients,
 	ingredientMeasurements,
-	Ingredients,
+	ingredients,
 	measurementType,
 } from "@prisma/client";
 import prisma from "../../../client";
@@ -13,7 +13,7 @@ export const getIngredientsByRecipeID = async (
 	const recipeIngredients = await prisma.recipeIngredients.findMany({
 		where: { recipeID: recipeID },
 		select: {
-			recipeIngredientsID: true,
+			recipeIngredientID: true,
 			recipeID: true,
 			ingredientMeasurements: {
 				select: {
@@ -28,7 +28,7 @@ export const getIngredientsByRecipeID = async (
 					Ingredients: {
 						select: {
 							ingredientID: true,
-							ingredientName: true,
+							ingredient: true,
 							ingredientDescription: true,
 							ingredientInfoURL: true,
 						},
@@ -47,7 +47,7 @@ export const getIngredientsByRecipeID = async (
 
 export const getRecipeIngredientsByRecipeID = async (
 	recipeID: number,
-): Promise<RecipeIngredients[]> => {
+): Promise<recipeIngredients[]> => {
 	const recipeIngredients = await prisma.recipeIngredients.findMany({
 		where: { recipeID: recipeID },
 	});
@@ -69,7 +69,7 @@ export const getIngredientMeasurements = async (
 
 export const getIngredient = async (
 	ingredientID: number,
-): Promise<Ingredients | undefined> => {
+): Promise<ingredients | undefined> => {
 	const ingredient = await prisma.ingredients.findUnique({
 		where: { ingredientID: ingredientID },
 	});

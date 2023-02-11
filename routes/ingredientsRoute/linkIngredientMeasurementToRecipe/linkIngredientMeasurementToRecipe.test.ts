@@ -1,10 +1,10 @@
 import { linkIngredientMeasurementToRecipe } from "./linkIngredientMeasurementToRecipe";
 import { prismaMock } from "../../../singleton";
-import { RecipeIngredients } from "@prisma/client";
+import { recipeIngredients } from "@prisma/client";
 
 describe("linkIngredientMeasurementToRecipe", () => {
-	const mockRecipeIngredients: RecipeIngredients = {
-		recipeIngredientsID: 1,
+	const mockRecipeIngredients: recipeIngredients = {
+		recipeIngredientID: 1,
 		recipeID: 1,
 		ingredientMeasurementID: 1,
 	};

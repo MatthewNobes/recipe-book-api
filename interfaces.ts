@@ -1,8 +1,8 @@
 import {
-	Ingredients,
+	ingredients,
 	measurementType,
 	ingredientMeasurements,
-	RecipeIngredients,
+	recipeIngredients,
 } from "@prisma/client";
 
 /**
@@ -17,10 +17,10 @@ interface Count {
  */
 type IngredientDetails = {
 	ingredientMeasurementID: ingredientMeasurements["ingredientMeasurementID"];
-	ingredientID: Ingredients["ingredientID"];
-	ingredientName: Ingredients["ingredientName"];
-	ingredientDescription: Ingredients["ingredientDescription"];
-	ingredientInfoURL: Ingredients["ingredientInfoURL"];
+	ingredientID: ingredients["ingredientID"];
+	ingredient: ingredients["ingredient"];
+	ingredientDescription: ingredients["ingredientDescription"];
+	ingredientInfoURL: ingredients["ingredientInfoURL"];
 	measurementSize: ingredientMeasurements["measurementSize"];
 	measurementTypeID: measurementType["measurementTypeID"];
 	measurementType: measurementType["measurementType"];
@@ -30,12 +30,12 @@ type FullMeasurements = {
 	ingredientMeasurementID: ingredientMeasurements["ingredientMeasurementID"];
 	measurementSize: ingredientMeasurements["measurementSize"];
 	measurementType: measurementType[];
-	Ingredients: Ingredients[];
+	Ingredients: ingredients[];
 };
 
 type FullIngredientMeasurement = {
-	recipeIngredientsID: RecipeIngredients["recipeIngredientsID"];
-	recipeID: RecipeIngredients["recipeID"];
+	recipeIngredientID: recipeIngredients["recipeIngredientID"];
+	recipeID: recipeIngredients["recipeID"];
 	ingredientMeasurementID: ingredientMeasurements["ingredientMeasurementID"];
 	ingredientMeasurements: FullMeasurements[];
 };

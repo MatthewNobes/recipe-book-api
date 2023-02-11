@@ -35,8 +35,8 @@ export const addFullIngredient = async (
 
 				if (linkedIngredient?.recipeID) {
 					return {
-						recipeIngredientID: linkedIngredient?.recipeIngredientsID,
-						ingredientName: ingredient.ingredientName,
+						recipeIngredientID: linkedIngredient?.recipeIngredientID,
+						ingredientName: ingredient.ingredient,
 						ingredientDescription: ingredient.ingredientDescription,
 						ingredientInfoURL: ingredient.ingredientInfoURL,
 						measurementTypeID: ingredientMeasurement.measurementTypeID,

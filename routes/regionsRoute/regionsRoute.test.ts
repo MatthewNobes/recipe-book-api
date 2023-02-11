@@ -1,10 +1,10 @@
 import request from "supertest";
 import app from "../../app";
 import { prismaMock } from "../../singleton";
-import { Regions } from "@prisma/client";
+import { regions } from "@prisma/client";
 
 describe("GET /api/regions", () => {
-	const mockRegionData: Regions[] = [
+	const mockRegionData: regions[] = [
 		{
 			regionID: 1,
 			region: "Test 1",

@@ -1,9 +1,9 @@
-import { Countries } from "@prisma/client";
+import { countries } from "@prisma/client";
 import prisma from "../../../client";
 
 export const addNewCountry = async (
 	country: string,
-): Promise<Countries | undefined> => {
+): Promise<countries | undefined> => {
 	if (country === "") {
 		return undefined;
 	}

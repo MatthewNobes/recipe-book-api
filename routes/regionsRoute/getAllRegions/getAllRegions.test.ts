@@ -1,9 +1,9 @@
 import { getAllRegions } from "./getAllRegions";
 import { prismaMock } from "../../../singleton";
-import { Regions } from "@prisma/client";
+import { regions } from "@prisma/client";
 
 describe("getAllCategories", () => {
-	const mockRegionData: Regions[] = [
+	const mockRegionData: regions[] = [
 		{
 			regionID: 1,
 			region: "Test 1",

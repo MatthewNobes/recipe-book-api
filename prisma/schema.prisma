@@ -7,79 +7,79 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Catagories {
-  catagoryID Int       @id(map: "PK__Catagori__0F3282E157F6BED6") @default(autoincrement())
-  catagory   String    @db.VarChar(255)
-  Recipes    Recipes[]
-}
-
-model Countries {
-  countryID Int       @id(map: "PK__Countrie__D320769C5C5C23DB") @default(autoincrement())
-  country   String    @db.VarChar(255)
-  Recipes   Recipes[]
-}
-
 model ingredientMeasurements {
-  ingredientMeasurementID Int                 @id(map: "PK__ingredie__4A094F909F69D227") @default(autoincrement())
-  measurementTypeID       Int
-  ingredientID            Int
+  ingredientMeasurementID Int                 @id(map: "PK__ingredie__4A094F90490B1894") @default(autoincrement())
+  ingredientID            Int?
+  measurementTypeID       Int?
   measurementSize         Int?
-  Ingredients             Ingredients         @relation(fields: [ingredientID], references: [ingredientID], onUpdate: NoAction, map: "FK__ingredien__ingre__45F365D3")
-  measurementType         measurementType     @relation(fields: [measurementTypeID], references: [measurementTypeID], onUpdate: NoAction, map: "FK__ingredien__measu__44FF419A")
-  RecipeIngredients       RecipeIngredients[]
-}
-
-model Ingredients {
-  ingredientID           Int                      @id(map: "PK__Ingredie__2753A6C7DB56B5D7") @default(autoincrement())
-  ingredientName         String                   @db.VarChar(255)
-  ingredientDescription  String?                  @db.VarChar(255)
-  ingredientInfoURL      String?                  @db.VarChar(255)
-  ingredientMeasurements ingredientMeasurements[]
+  Ingredients             ingredients?        @relation(fields: [ingredientID], references: [ingredientID], onDelete: NoAction, onUpdate: NoAction, map: "FK__ingredien__ingre__45F365D3")
+  measurementType         measurementType?    @relation(fields: [measurementTypeID], references: [measurementTypeID], onDelete: NoAction, onUpdate: NoAction, map: "FK__ingredien__measu__44FF419A")
+  recipeIngredients       recipeIngredients[]
 }
 
 model measurementType {
-  measurementTypeID      Int                      @id(map: "PK__measurem__8AF905ACB3CD8ED0") @default(autoincrement())
-  measurementType        String                   @db.VarChar(255)
+  measurementTypeID      Int                      @id(map: "PK__measurem__8AF905ACFECDFEDA") @default(autoincrement())
+  measurementType        String                   @db.VarChar(300)
   ingredientMeasurements ingredientMeasurements[]
 }
 
-model RecipeIngredients {
-  recipeIngredientsID     Int                    @id(map: "PK__RecipeIn__316CB41259A9A915") @default(autoincrement())
-  recipeID                Int
-  ingredientMeasurementID Int
-  ingredientMeasurements  ingredientMeasurements @relation(fields: [ingredientMeasurementID], references: [ingredientMeasurementID], onUpdate: NoAction, map: "FK__RecipeIng__ingre__4E88ABD4")
-  Recipes                 Recipes                @relation(fields: [recipeID], references: [RecipeID], onUpdate: NoAction, map: "FK__RecipeIng__recip__4D94879B")
+model categories {
+  categoryID Int       @id(map: "PK__categori__23CAF1F85D24E2DF") @default(autoincrement())
+  category   String    @db.VarChar(300)
+  recipes    recipes[]
 }
 
-model Recipes {
-  RecipeID               Int                 @id(map: "PK__Recipes__FDD988D003487EF5") @default(autoincrement())
-  RecipeName             String              @db.VarChar(255)
-  RecipeDecsription      String              @db.VarChar(255)
-  RecipeDifficultyRating Int?
-  RecipePrepTime         String?             @db.VarChar(255)
-  RecipeCookTime         String?             @db.VarChar(255)
-  ServingNumber          Int
-  RecipeSource           String?             @db.VarChar(255)
-  catagoryID             Int?
+model countries {
+  countryID Int       @id(map: "PK__countrie__D320769CBC2429A2") @default(autoincrement())
+  country   String    @db.VarChar(300)
+  recipes   recipes[]
+}
+
+model ingredients {
+  ingredientID           Int                      @id(map: "PK__ingredie__2753A6C76A51B502") @default(autoincrement())
+  ingredient             String                   @db.VarChar(300)
+  ingredientDescription  String?                  @db.VarChar(3000)
+  ingredientInfoURL      String?                  @db.VarChar(3000)
+  ingredientMeasurements ingredientMeasurements[]
+}
+
+model recipeIngredients {
+  recipeIngredientID      Int                     @id(map: "PK__recipeIn__FCBF65CACDBFF6CF") @default(autoincrement())
+  recipeID                Int?
+  ingredientMeasurementID Int?
+  ingredientMeasurements  ingredientMeasurements? @relation(fields: [ingredientMeasurementID], references: [ingredientMeasurementID], onDelete: NoAction, onUpdate: NoAction, map: "FK__recipeIng__ingre__4AB81AF0")
+  recipes                 recipes?                @relation(fields: [recipeID], references: [recipeID], onDelete: NoAction, onUpdate: NoAction, map: "FK__recipeIng__recip__49C3F6B7")
+}
+
+model recipes {
+  recipeID               Int                 @id(map: "PK__recipes__C114EE6342E1FB48") @default(autoincrement())
+  recipeName             String              @db.VarChar(300)
+  recipeDescription      String              @db.VarChar(3000)
+  servingNumber          Int
+  recipeSource           String?             @db.VarChar(3000)
+  categoryID             Int?
   countryID              Int?
   regionID               Int?
-  RecipeIngredients      RecipeIngredients[]
-  Catagories             Catagories?         @relation(fields: [catagoryID], references: [catagoryID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__catagor__5AEE82B9")
-  Countries              Countries?          @relation(fields: [countryID], references: [countryID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__country__5DCAEF64")
-  Regions                Regions?            @relation(fields: [regionID], references: [regionID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Recipes__regionI__60A75C0F")
-  RecipeSteps            RecipeSteps[]
+  recipeDifficultyRating Int?
+  recipeCookTime         String?             @db.VarChar(30)
+  recipePrepTime         String?             @db.VarChar(30)
+  recipeIngredients      recipeIngredients[]
+  categories             categories?         @relation(fields: [categoryID], references: [categoryID], onDelete: NoAction, onUpdate: NoAction, map: "FK__recipes__categor__3D5E1FD2")
+  countries              countries?          @relation(fields: [countryID], references: [countryID], onDelete: NoAction, onUpdate: NoAction, map: "FK__recipes__country__3E52440B")
+  regions                regions?            @relation(fields: [regionID], references: [regionID], onDelete: NoAction, onUpdate: NoAction, map: "FK__recipes__regionI__3F466844")
+  recipeSteps            recipeSteps[]
 }
 
-model RecipeSteps {
-  recipeStepID Int     @id(map: "PK__RecipeSt__86116B1A5B4243C1") @default(autoincrement())
-  stepNumber   Int
-  stepText     String  @db.VarChar(2048)
-  recipeID     Int
-  Recipes      Recipes @relation(fields: [recipeID], references: [RecipeID], onUpdate: NoAction, map: "FK__RecipeSte__recip__534D60F1")
+model recipeSteps {
+  recipeStepID Int      @id(map: "PK__recipeSt__86116B1A59637597") @default(autoincrement())
+  stepText     String   @db.VarChar(3000)
+  stepNumber   Int?
+  recipeID     Int?
+  recipes      recipes? @relation(fields: [recipeID], references: [recipeID], onDelete: NoAction, onUpdate: NoAction, map: "FK__recipeSte__recip__4D94879B")
 }
 
-model Regions {
-  regionID Int       @id(map: "PK__Regions__15EA9088FCF77BF3") @default(autoincrement())
-  region   String    @db.VarChar(255)
-  Recipes  Recipes[]
+model regions {
+  regionID Int       @id(map: "PK__regions__15EA9088D480DE43") @default(autoincrement())
+  region   String    @db.VarChar(300)
+  recipes  recipes[]
 }

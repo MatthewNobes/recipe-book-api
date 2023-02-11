@@ -1,5 +1,5 @@
 import prisma from "../../../client";
-import { RecipeSteps } from "@prisma/client";
+import { recipeSteps } from "@prisma/client";
 
 /**
  * Gets a step from the unique ID of the step
@@ -8,7 +8,7 @@ import { RecipeSteps } from "@prisma/client";
  */
 export const getStepFromRecipeStepID = async (
 	stepID: number,
-): Promise<RecipeSteps | undefined> => {
+): Promise<recipeSteps | undefined> => {
 	const step = await prisma.recipeSteps.findFirst({
 		where: { recipeStepID: stepID },
 	});

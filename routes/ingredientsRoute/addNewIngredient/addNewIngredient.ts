@@ -1,4 +1,4 @@
-import { Ingredients } from "@prisma/client";
+import { ingredients } from "@prisma/client";
 import prisma from "../../../client";
 
 /**
@@ -12,13 +12,13 @@ export const addNewIngredient = async (
 	ingredientName: string,
 	ingredientDescription?: string,
 	ingredientInfoURL?: string,
-): Promise<Ingredients | undefined> => {
+): Promise<ingredients | undefined> => {
 	if (ingredientName === "") {
 		return undefined;
 	}
 	const newIngredient = await prisma.ingredients.create({
 		data: {
-			ingredientName: ingredientName,
+			ingredient: ingredientName,
 			ingredientDescription: ingredientDescription,
 			ingredientInfoURL: ingredientInfoURL,
 		},

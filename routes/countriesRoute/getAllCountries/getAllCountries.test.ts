@@ -1,9 +1,9 @@
 import { getAllCountries } from "./getAllCountries";
 import { prismaMock } from "../../../singleton";
-import { Countries } from "@prisma/client";
+import { countries } from "@prisma/client";
 
 describe("getAllCountries", () => {
-	const mockCountryData: Countries[] = [
+	const mockCountryData: countries[] = [
 		{
 			countryID: 1,
 			country: "Test 1",

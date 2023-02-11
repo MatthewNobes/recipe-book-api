@@ -1,10 +1,10 @@
 import request from "supertest";
 import app from "../../app";
 import { prismaMock } from "../../singleton";
-import { Countries } from "@prisma/client";
+import { countries } from "@prisma/client";
 
 describe("GET /api/countries/countries", () => {
-	const mockCountryData: Countries[] = [
+	const mockCountryData: countries[] = [
 		{
 			countryID: 1,
 			country: "Test 1",
@@ -31,7 +31,7 @@ describe("GET /api/countries/countries", () => {
 });
 
 describe("GET /api/countries/country/:countryID", () => {
-	const mockCountryData: Countries = {
+	const mockCountryData: countries = {
 		countryID: 1,
 		country: "Test 1",
 	};
@@ -65,7 +65,7 @@ describe("GET /api/countries/country/:countryID", () => {
 });
 
 describe("POST /api/countries/add/:countryID", () => {
-	const mockCountry: Countries = {
+	const mockCountry: countries = {
 		countryID: 1,
 		country: "Belgium",
 	};

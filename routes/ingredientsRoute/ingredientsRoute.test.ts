@@ -2,22 +2,22 @@ import request from "supertest";
 import app from "../../app";
 import { prismaMock } from "../../singleton";
 import {
-	Ingredients,
-	RecipeIngredients,
+	ingredients,
+	recipeIngredients,
 	ingredientMeasurements,
 } from "@prisma/client";
 
 describe("GET /api/ingredients/ingredients", () => {
-	const mockIngredientsData: Ingredients[] = [
+	const mockIngredientsData: ingredients[] = [
 		{
 			ingredientID: 1,
-			ingredientName: "Test 1",
+			ingredient: "Test 1",
 			ingredientDescription: "Test Description 1",
 			ingredientInfoURL: "www.google.com",
 		},
 		{
 			ingredientID: 2,
-			ingredientName: "Test 2",
+			ingredient: "Test 2",
 			ingredientDescription: "Test Description 2",
 			ingredientInfoURL: "www.google.com",
 		},
@@ -39,9 +39,9 @@ describe("GET /api/ingredients/ingredients", () => {
 });
 
 describe("POST /api/ingredients/add/:ingredientName/:ingredientDescription/:ingredientInfoURL", () => {
-	const mockIngredient: Ingredients = {
+	const mockIngredient: ingredients = {
 		ingredientID: 1,
-		ingredientName: "Hello",
+		ingredient: "Hello",
 		ingredientDescription: "Hello world",
 		ingredientInfoURL: "encodedURLhere",
 	};
@@ -53,8 +53,8 @@ describe("POST /api/ingredients/add/:ingredientName/:ingredientDescription/:ingr
 		measurementSize: 23,
 	};
 
-	const mockRecipeIngredients: RecipeIngredients = {
-		recipeIngredientsID: 1,
+	const mockRecipeIngredients: recipeIngredients = {
+		recipeIngredientID: 1,
 		recipeID: 1,
 		ingredientMeasurementID: 1,
 	};
@@ -72,7 +72,7 @@ describe("POST /api/ingredients/add/:ingredientName/:ingredientDescription/:ingr
 	});
 	describe("successful circumstances", () => {
 		it("should return the added ingredient Test 1", async () => {
-			const ingredientName = mockIngredient.ingredientName;
+			const ingredientName = mockIngredient.ingredient;
 			const ingredientDescription = mockIngredient.ingredientDescription;
 			const ingredientInfoURL = mockIngredient.ingredientInfoURL;
 			const measurementTypeID = mockIngredientMeasurement.measurementTypeID;
@@ -97,10 +97,10 @@ describe("POST /api/ingredients/add/:ingredientName/:ingredientDescription/:ingr
 			expect(response.statusCode).toBe(201);
 			expect(response.body).toStrictEqual({
 				data: {
-					recipeIngredientID: mockRecipeIngredients.recipeIngredientsID,
+					recipeIngredientID: mockRecipeIngredients.recipeIngredientID,
 					ingredientDescription: mockIngredient.ingredientDescription,
 					ingredientInfoURL: mockIngredient.ingredientInfoURL,
-					ingredientName: mockIngredient.ingredientName,
+					ingredientName: mockIngredient.ingredient,
 					measurementSize: mockIngredientMeasurement.measurementSize,
 					measurementTypeID: mockIngredientMeasurement.measurementTypeID,
 					recipeID: mockRecipeIngredients.recipeID,

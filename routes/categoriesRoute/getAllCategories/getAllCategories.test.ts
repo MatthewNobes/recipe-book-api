@@ -1,21 +1,21 @@
 import { getAllCategories } from "./getAllCategories";
 import { prismaMock } from "../../../singleton";
-import { Catagories } from "@prisma/client";
+import { categories } from "@prisma/client";
 
 describe("getAllCategories", () => {
-	const mockCategoryData: Catagories[] = [
+	const mockCategoryData: categories[] = [
 		{
-			catagoryID: 1,
-			catagory: "Test 1",
+			categoryID: 1,
+			category: "Test 1",
 		},
 		{
-			catagoryID: 2,
-			catagory: "Test 2",
+			categoryID: 2,
+			category: "Test 2",
 		},
 	];
 
 	beforeEach(() => {
-		prismaMock.catagories.findMany.mockResolvedValue(mockCategoryData);
+		prismaMock.categories.findMany.mockResolvedValue(mockCategoryData);
 	});
 
 	it("should return the mocked categories", async () => {

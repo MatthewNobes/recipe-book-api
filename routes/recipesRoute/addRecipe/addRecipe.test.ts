@@ -1,19 +1,19 @@
 import { addRecipe } from "./addRecipe";
 import { prismaMock } from "../../../singleton";
-import { Recipes } from "@prisma/client";
+import { recipes } from "@prisma/client";
 
 describe("addRecipe", () => {
-	const mockRecipes: Recipes = {
-		RecipeID: 1,
-		RecipeName: "Test recipe",
-		RecipeDecsription: "Test description",
-		RecipeDifficultyRating: 4,
-		RecipePrepTime: "0:30",
-		RecipeCookTime: "1:00",
-		ServingNumber: 4,
-		RecipeSource:
+	const mockRecipes: recipes = {
+		recipeID: 1,
+		recipeName: "Test recipe",
+		recipeDescription: "Test description",
+		recipeDifficultyRating: 4,
+		recipePrepTime: "0:30",
+		recipeCookTime: "1:00",
+		servingNumber: 4,
+		recipeSource:
 			"https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils",
-		catagoryID: 1,
+		categoryID: 1,
 		countryID: 2,
 		regionID: 3,
 	};
