@@ -1,7 +1,7 @@
 import express from "express";
 import { addNewCountry, getCountryByID, getAllCountries } from "./";
 
-let router = express.Router();
+const router = express.Router();
 
 /**
  * @swagger

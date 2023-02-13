@@ -1,9 +1,9 @@
 import { getStepFromRecipeStepID } from "./getStepFromRecipeStepID";
 import { prismaMock } from "../../../singleton";
-import { RecipeSteps } from "@prisma/client";
+import { recipeSteps } from "@prisma/client";
 
 describe("getStepFromRecipeStepID", () => {
-	const mockRecipeStep: RecipeSteps = {
+	const mockRecipeStep: recipeSteps = {
 		recipeStepID: 1,
 		stepNumber: 1,
 		stepText: "Test 1",

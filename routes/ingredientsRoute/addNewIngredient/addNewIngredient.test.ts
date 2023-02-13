@@ -1,11 +1,11 @@
 import { addNewIngredient } from "./addNewIngredient";
 import { prismaMock } from "../../../singleton";
-import { Ingredients } from "@prisma/client";
+import { ingredients } from "@prisma/client";
 
 describe("addNewIngredient", () => {
-	const mockIngredient: Ingredients = {
+	const mockIngredient: ingredients = {
 		ingredientID: 1,
-		ingredientName: "Test 1",
+		ingredient: "Test 1",
 		ingredientDescription: "Test Description 1",
 		ingredientInfoURL: "www.google.com",
 	};

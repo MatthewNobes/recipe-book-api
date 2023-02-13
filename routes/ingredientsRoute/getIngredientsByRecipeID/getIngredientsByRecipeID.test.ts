@@ -8,9 +8,9 @@ import {
 import { prismaMock } from "../../../singleton";
 import {
 	ingredientMeasurements,
-	Ingredients,
+	ingredients,
 	measurementType,
-	RecipeIngredients,
+	recipeIngredients,
 } from "@prisma/client";
 import {
 	FullIngredientMeasurement,
@@ -18,9 +18,9 @@ import {
 } from "../../../interfaces";
 
 describe("getIngredientsByRecipeID", () => {
-	const mockIngredient: Ingredients = {
+	const mockIngredient: ingredients = {
 		ingredientID: 1,
-		ingredientName: "Cumin",
+		ingredient: "Cumin",
 		ingredientDescription: "Hello world",
 		ingredientInfoURL: "www.google.com",
 	};
@@ -39,7 +39,7 @@ describe("getIngredientsByRecipeID", () => {
 
 	const mockRecipeIngredients: FullIngredientMeasurement[] = [
 		{
-			recipeIngredientsID: 45,
+			recipeIngredientID: 45,
 			recipeID: 1,
 			ingredientMeasurementID: 1,
 			ingredientMeasurements: [mockIngredientMeasurements],
@@ -60,24 +60,24 @@ describe("getIngredientsByRecipeID", () => {
 });
 
 describe("getRecipeIngredientsByRecipeID", () => {
-	const mockRecipeIngredients: RecipeIngredients[] = [
+	const mockRecipeIngredients: recipeIngredients[] = [
 		{
-			recipeIngredientsID: 1,
+			recipeIngredientID: 1,
 			recipeID: 1,
 			ingredientMeasurementID: 4,
 		},
 		{
-			recipeIngredientsID: 3,
+			recipeIngredientID: 3,
 			recipeID: 1,
 			ingredientMeasurementID: 45,
 		},
 		{
-			recipeIngredientsID: 5,
+			recipeIngredientID: 5,
 			recipeID: 1,
 			ingredientMeasurementID: 407,
 		},
 		{
-			recipeIngredientsID: 45,
+			recipeIngredientID: 45,
 			recipeID: 1,
 			ingredientMeasurementID: 554,
 		},
@@ -122,9 +122,9 @@ describe("getIngredientMeasurements", () => {
 });
 
 describe("getIngredient", () => {
-	const mockIngredient: Ingredients = {
+	const mockIngredient: ingredients = {
 		ingredientID: 1,
-		ingredientName: "Cumin",
+		ingredient: "Cumin",
 		ingredientDescription: "Hello world",
 		ingredientInfoURL: "www.google.com",
 	};

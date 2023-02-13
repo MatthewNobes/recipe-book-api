@@ -1,9 +1,9 @@
 import { addNewCountry } from "./addNewCountry";
 import { prismaMock } from "../../../singleton";
-import { Countries } from "@prisma/client";
+import { countries } from "@prisma/client";
 
 describe("addNewCountry", () => {
-	const mockCountry: Countries = {
+	const mockCountry: countries = {
 		countryID: 1,
 		country: "Test 1",
 	};

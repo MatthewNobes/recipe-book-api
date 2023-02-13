@@ -1,11 +1,11 @@
 import request from "supertest";
 import app from "../../app";
 import { prismaMock } from "../../singleton";
-import { RecipeSteps } from "@prisma/client";
+import { recipeSteps } from "@prisma/client";
 import { Count } from "../../interfaces";
 
 describe("GET /api/method/method/:recipeID", () => {
-	const mockRecipeStepsData: RecipeSteps[] = [
+	const mockRecipeStepsData: recipeSteps[] = [
 		{
 			recipeStepID: 1,
 			stepNumber: 1,
@@ -45,7 +45,7 @@ describe("GET /api/method/method/:recipeID", () => {
 });
 
 describe("GET /api/method/step/:recipeStepID", () => {
-	const mockRecipeStepsData: RecipeSteps = {
+	const mockRecipeStepsData: recipeSteps = {
 		recipeStepID: 1,
 		stepNumber: 1,
 		stepText: "Test 1",
@@ -77,7 +77,7 @@ describe("GET /api/method/step/:recipeStepID", () => {
 });
 
 describe("POST /api/method/step/add/:recipeID/:stepNumber/:stepText", () => {
-	const mockRecipeStepsData: RecipeSteps = {
+	const mockRecipeStepsData: recipeSteps = {
 		recipeStepID: 1,
 		stepNumber: 3,
 		stepText: "Step 1",
@@ -123,7 +123,7 @@ describe("POST /api/method/step/add/:recipeID/:stepNumber/:stepText", () => {
 
 describe("DELETE /api/method/step/delete/:recipeStepID", () => {
 	describe("successful circumstances", () => {
-		const mockRecipeStepsData: RecipeSteps = {
+		const mockRecipeStepsData: recipeSteps = {
 			recipeStepID: 1,
 			stepNumber: 3,
 			stepText: "Step 1",
@@ -216,7 +216,7 @@ describe("DELETE /api/method/method/delete/:recipeID", () => {
 });
 
 describe("PUT /api/method/instructionTextUpdate/:recipeID/:stepText", () => {
-	const mockRecipeStepsData: RecipeSteps = {
+	const mockRecipeStepsData: recipeSteps = {
 		recipeStepID: 1,
 		stepNumber: 3,
 		stepText: "Updated text",
@@ -261,7 +261,7 @@ describe("PUT /api/method/instructionTextUpdate/:recipeID/:stepText", () => {
 });
 
 describe("PUT /api/method/step/update/stepNumber/:recipeID/:stepNumber", () => {
-	const mockRecipeStepsData: RecipeSteps = {
+	const mockRecipeStepsData: recipeSteps = {
 		recipeStepID: 1,
 		stepNumber: 3,
 		stepText: "Updated text",

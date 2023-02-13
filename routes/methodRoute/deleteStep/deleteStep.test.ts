@@ -1,10 +1,10 @@
 import { deleteStep } from "./deleteStep";
 import { prismaMock } from "../../../singleton";
-import { RecipeSteps } from "@prisma/client";
+import { recipeSteps } from "@prisma/client";
 
 describe("deleteStep", () => {
 	describe("successful delete", () => {
-		const mockDeletedStep: RecipeSteps = {
+		const mockDeletedStep: recipeSteps = {
 			recipeStepID: 1,
 			stepNumber: 2,
 			stepText: "Step 1",

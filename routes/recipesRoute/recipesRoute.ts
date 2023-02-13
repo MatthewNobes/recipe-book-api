@@ -24,39 +24,39 @@ const recipeRouter = express.Router();
  *                   items:
  *                     type: object
  *                     properties:
- *                       RecipeID:
+ *                       recipeID:
  *                         type: integer
  *                         description: The recipes ID.
  *                         example: 1
- *                       RecipeName:
+ *                       recipeName:
  *                         type: string
  *                         description: The name of the recipe.
  *                         example: Roast Chicken
- *                       RecipeDecsription:
+ *                       recipeDescription:
  *                         type: string
  *                         description: The description of the recipe.
  *                         example: A nice roasted chicken with roast potatoes
- *                       RecipeDifficultyRating:
+ *                       recipeDifficultyRating:
  *                         type: integer
  *                         description: The rating of difficulty the recipes is deemed out of ten
  *                         example: 5
- *                       RecipePrepTime:
+ *                       recipePrepTime:
  *                         type: string
  *                         description: The time required to prepare for this recipe
  *                         example: 0:30
- *                       RecipeCookTime:
+ *                       recipeCookTime:
  *                         type: string
  *                         description: The description of the recipe.
  *                         example: 1:10
- *                       ServingNumber:
+ *                       servingNumber:
  *                         type: integer
  *                         description: The number of people this will serve
  *                         example: 4
- *                       RecipeSource:
+ *                       recipeSource:
  *                         type: string
  *                         description: The source the recipe came from
  *                         example: https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils
- *                       catagoryID:
+ *                       categoryID:
  *                         type: integer
  *                         description: The ID of the recipes category
  *                         example: 5
@@ -97,27 +97,27 @@ recipeRouter.route("/recipes").get(async (request, result) => {
  *             schema:
  *               type: object
  *               properties:
- *                 RecipeID:
+ *                 recipeID:
  *                   type: integer
  *                   description: The recipes ID.
  *                   example: 1
- *                 RecipeName:
+ *                 recipeName:
  *                   type: string
  *                   description: The name of the recipe.
  *                   example: Roast Chicken
- *                 RecipeDecsription:
+ *                 recipeDescription:
  *                   type: string
  *                   description: The description of the recipe.
  *                   example: A nice roasted chicken with roast potatoes
- *                 RecipeDifficultyRating:
+ *                 recipeDifficultyRating:
  *                   type: integer
  *                   description: The rating of difficulty the recipes is deemed out of ten
  *                   example: 5
- *                 RecipePrepTime:
+ *                 recipePrepTime:
  *                   type: string
  *                   description: The time required to prepare for this recipe
  *                   example: 0:30
- *                 RecipeCookTime:
+ *                 recipeCookTime:
  *                   type: string
  *                   description: The description of the recipe.
  *                   example: 1:10
@@ -125,11 +125,11 @@ recipeRouter.route("/recipes").get(async (request, result) => {
  *                   type: integer
  *                   description: The number of people this will serve
  *                   example: 4
- *                 RecipeSource:
+ *                 recipeSource:
  *                   type: string
  *                   description: The source the recipe came from
  *                   example: https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils
- *                 catagoryID:
+ *                 categoryID:
  *                   type: integer
  *                   description: The ID of the recipes category
  *                   example: 5
@@ -148,7 +148,7 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
 	try {
 		const recipe = await getRecipeByID(requestedRecipeID);
 
-		if (recipe && recipe.RecipeID === requestedRecipeID) {
+		if (recipe && recipe.recipeID === requestedRecipeID) {
 			result.json({ data: recipe });
 		} else {
 			throw "no recipe found";
@@ -161,7 +161,7 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
 
 /**
  * @swagger
- * /api/recipes/add/{recipeName}-{recipeDescription}-{recipeDifficultyRating}-{recipePrepTime}-{recipeCookTime}-{servingNumber}-{recipeSource}-{catagoryID}-{countryID}-{regionID}:
+ * /api/recipes/add/{recipeName}-{recipeDescription}-{recipeDifficultyRating}-{recipePrepTime}-{recipeCookTime}-{servingNumber}-{recipeSource}-{categoryID}-{countryID}-{regionID}:
  *   post:
  *     summary: Adds a new recipe
  *     description: Used to add a new recipe to the system.
@@ -211,7 +211,7 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
  *         schema:
  *           type: string
  *       - in: path
- *         name: catagoryID
+ *         name: categoryID
  *         required: false
  *         description: The ID of the category this recipe lies within
  *         schema:
@@ -236,27 +236,27 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
  *             schema:
  *               type: object
  *               properties:
- *                 RecipeID:
+ *                 recipeID:
  *                   type: integer
  *                   description: The recipes ID.
  *                   example: 1
- *                 RecipeName:
+ *                 recipeName:
  *                   type: string
  *                   description: The name of the recipe.
  *                   example: Roast Chicken
- *                 RecipeDecsription:
+ *                 recipeDescription:
  *                   type: string
  *                   description: The description of the recipe.
  *                   example: A nice roasted chicken with roast potatoes
- *                 RecipeDifficultyRating:
+ *                 recipeDifficultyRating:
  *                   type: integer
  *                   description: The rating of difficulty the recipes is deemed out of ten
  *                   example: 5
- *                 RecipePrepTime:
+ *                 recipePrepTime:
  *                   type: string
  *                   description: The time required to prepare for this recipe
  *                   example: 0:30
- *                 RecipeCookTime:
+ *                 recipeCookTime:
  *                   type: string
  *                   description: The description of the recipe.
  *                   example: 1:10
@@ -264,11 +264,11 @@ recipeRouter.route("/recipe/:recipeID").get(async (request, result) => {
  *                   type: integer
  *                   description: The number of people this will serve
  *                   example: 4
- *                 RecipeSource:
+ *                 recipeSource:
  *                   type: string
  *                   description: The source the recipe came from
  *                   example: https://www.bbcgoodfood.com/recipes/mustardy-salmon-beetroot-lentils
- *                 catagoryID:
+ *                 categoryID:
  *                   type: integer
  *                   description: The ID of the recipes category
  *                   example: 5

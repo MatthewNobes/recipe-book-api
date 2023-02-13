@@ -1,4 +1,4 @@
-import { RecipeSteps } from "@prisma/client";
+import { recipeSteps } from "@prisma/client";
 import prisma from "../../../client";
 
 /**
@@ -12,7 +12,7 @@ export const addNewStep = async (
 	stepText: string,
 	stepNumber: number,
 	recipeID: number,
-): Promise<RecipeSteps | undefined> => {
+): Promise<recipeSteps | undefined> => {
 	if (
 		stepText === "" ||
 		stepNumber === 0 ||

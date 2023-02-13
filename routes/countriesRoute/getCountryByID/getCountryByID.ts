@@ -1,9 +1,9 @@
-import { Countries } from "@prisma/client";
+import { countries } from "@prisma/client";
 import prisma from "../../../client";
 
 export const getCountryByID = async (
 	id: number,
-): Promise<Countries | undefined> => {
+): Promise<countries | undefined> => {
 	const country = await prisma.countries.findUnique({
 		where: {
 			countryID: id,

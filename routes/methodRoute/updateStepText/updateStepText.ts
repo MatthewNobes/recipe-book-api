@@ -1,16 +1,16 @@
-import { RecipeSteps } from "@prisma/client";
+import { recipeSteps } from "@prisma/client";
 import prisma from "../../../client";
 
 /**
  * Used to update a step's text
  * @param updatedStepText the updated text
  * @param recipeStepID the id of the step to update
- * @returns Promise<RecipeSteps | undefined> either the recipe step that has been updated or undefined
+ * @returns Promise<recipeSteps | undefined> either the recipe step that has been updated or undefined
  */
 export const updateStepText = async (
 	updatedStepText: string,
 	recipeStepID: number,
-): Promise<RecipeSteps | undefined> => {
+): Promise<recipeSteps | undefined> => {
 	if (
 		updatedStepText === "" ||
 		recipeStepID === 0 ||

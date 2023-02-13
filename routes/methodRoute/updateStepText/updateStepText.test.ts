@@ -1,9 +1,9 @@
 import { updateStepText } from "./updateStepText";
 import { prismaMock } from "../../../singleton";
-import { RecipeSteps } from "@prisma/client";
+import { recipeSteps } from "@prisma/client";
 
 describe("updateStepText", () => {
-	const mockRecipeStepsData: RecipeSteps = {
+	const mockRecipeStepsData: recipeSteps = {
 		recipeStepID: 1,
 		stepNumber: 2,
 		stepText: "Updated Text",

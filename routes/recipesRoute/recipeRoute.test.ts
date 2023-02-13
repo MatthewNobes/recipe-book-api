@@ -1,35 +1,35 @@
 import request from "supertest";
 import app from "../../app";
 import { prismaMock } from "../../singleton";
-import { Recipes } from "@prisma/client";
+import { recipes } from "@prisma/client";
 
 describe("GET /recipes", () => {
-	const mockRecipeData: Recipes[] = [
+	const mockRecipeData: recipes[] = [
 		{
-			RecipeID: 1,
-			RecipeName: "Test recipe 1",
-			RecipeDecsription: "Test description",
-			RecipeDifficultyRating: 4,
-			RecipePrepTime: "0:30",
-			RecipeCookTime: "1:00",
-			ServingNumber: 4,
-			RecipeSource:
+			recipeID: 1,
+			recipeName: "Test recipe 1",
+			recipeDescription: "Test description",
+			recipeDifficultyRating: 4,
+			recipePrepTime: "0:30",
+			recipeCookTime: "1:00",
+			servingNumber: 4,
+			recipeSource:
 				"https%3A%2F%2Fwww.bbcgoodfood.com%2Frecipes%2Fmustardy-salmon-beetroot-lentils",
-			catagoryID: 1,
+			categoryID: 1,
 			countryID: 2,
 			regionID: 3,
 		},
 		{
-			RecipeID: 2,
-			RecipeName: "Test recipe 2",
-			RecipeDecsription: "Test description",
-			RecipeDifficultyRating: 4,
-			RecipePrepTime: "0:30",
-			RecipeCookTime: "1:00",
-			ServingNumber: 4,
-			RecipeSource:
+			recipeID: 2,
+			recipeName: "Test recipe 2",
+			recipeDescription: "Test description",
+			recipeDifficultyRating: 4,
+			recipePrepTime: "0:30",
+			recipeCookTime: "1:00",
+			servingNumber: 4,
+			recipeSource:
 				"https%3A%2F%2Fwww.bbcgoodfood.com%2Frecipes%2Fmustardy-salmon-beetroot-lentils",
-			catagoryID: 1,
+			categoryID: 1,
 			countryID: 2,
 			regionID: 3,
 		},
@@ -48,17 +48,17 @@ describe("GET /recipes", () => {
 });
 
 describe("GET /recipe/:recipeID", () => {
-	const mockRecipe: Recipes = {
-		RecipeID: 1,
-		RecipeName: "Test recipe 1",
-		RecipeDecsription: "Test description",
-		RecipeDifficultyRating: 4,
-		RecipePrepTime: "0:30",
-		RecipeCookTime: "1:00",
-		ServingNumber: 4,
-		RecipeSource:
+	const mockRecipe: recipes = {
+		recipeID: 1,
+		recipeName: "Test recipe 1",
+		recipeDescription: "Test description",
+		recipeDifficultyRating: 4,
+		recipePrepTime: "0:30",
+		recipeCookTime: "1:00",
+		servingNumber: 4,
+		recipeSource:
 			"https%3A%2F%2Fwww.bbcgoodfood.com%2Frecipes%2Fmustardy-salmon-beetroot-lentils",
-		catagoryID: 1,
+		categoryID: 1,
 		countryID: 2,
 		regionID: 3,
 	};
@@ -87,17 +87,17 @@ describe("GET /recipe/:recipeID", () => {
 });
 
 describe("POST /add/:recipeName/:recipeDescription/:recipeDifficultyRating/:recipePrepTime/:recipeCookTime/:servingNumber/:recipeSource/:catagoryID/:countryID/:regionID", () => {
-	const mockRecipes: Recipes = {
-		RecipeID: 1,
-		RecipeName: "Test recipe",
-		RecipeDecsription: "Test description",
-		RecipeDifficultyRating: 4,
-		RecipePrepTime: "0:30",
-		RecipeCookTime: "1:00",
-		ServingNumber: 4,
-		RecipeSource:
+	const mockRecipes: recipes = {
+		recipeID: 1,
+		recipeName: "Test recipe",
+		recipeDescription: "Test description",
+		recipeDifficultyRating: 4,
+		recipePrepTime: "0:30",
+		recipeCookTime: "1:00",
+		servingNumber: 4,
+		recipeSource:
 			"https%3A%2F%2Fwww.bbcgoodfood.com%2Frecipes%2Fmustardy-salmon-beetroot-lentils",
-		catagoryID: 1,
+		categoryID: 1,
 		countryID: 2,
 		regionID: 3,
 	};
@@ -108,14 +108,14 @@ describe("POST /add/:recipeName/:recipeDescription/:recipeDifficultyRating/:reci
 
 	describe("successful circumstances", () => {
 		it("should return the added recipe Test recipe", async () => {
-			const recipeName = mockRecipes.RecipeName;
-			const recipeDescription = mockRecipes.RecipeDecsription;
-			const recipeDifficultyRating = mockRecipes.RecipeDifficultyRating;
-			const recipePrepTime = mockRecipes.RecipePrepTime;
-			const recipeCookTime = mockRecipes.RecipeCookTime;
-			const servingNumber = mockRecipes.ServingNumber;
-			const recipeSource = mockRecipes.RecipeSource;
-			const categoryID = mockRecipes.catagoryID;
+			const recipeName = mockRecipes.recipeName;
+			const recipeDescription = mockRecipes.recipeDescription;
+			const recipeDifficultyRating = mockRecipes.recipeDifficultyRating;
+			const recipePrepTime = mockRecipes.recipePrepTime;
+			const recipeCookTime = mockRecipes.recipeCookTime;
+			const servingNumber = mockRecipes.servingNumber;
+			const recipeSource = mockRecipes.recipeSource;
+			const categoryID = mockRecipes.categoryID;
 			const countryID = mockRecipes.countryID;
 			const regionID = mockRecipes.regionID;
 
@@ -149,13 +149,13 @@ describe("POST /add/:recipeName/:recipeDescription/:recipeDifficultyRating/:reci
 
 	describe("unsuccessful circumstances", () => {
 		it("should return 404 as a lack of parameter will fail to find the route", async () => {
-			const recipeDescription = mockRecipes.RecipeDecsription;
-			const recipeDifficultyRating = mockRecipes.RecipeDifficultyRating;
-			const recipePrepTime = mockRecipes.RecipePrepTime;
-			const recipeCookTime = mockRecipes.RecipeCookTime;
-			const servingNumber = mockRecipes.ServingNumber;
-			const recipeSource = mockRecipes.RecipeSource;
-			const categoryID = mockRecipes.catagoryID;
+			const recipeDescription = mockRecipes.recipeDescription;
+			const recipeDifficultyRating = mockRecipes.recipeDifficultyRating;
+			const recipePrepTime = mockRecipes.recipePrepTime;
+			const recipeCookTime = mockRecipes.recipeCookTime;
+			const servingNumber = mockRecipes.servingNumber;
+			const recipeSource = mockRecipes.recipeSource;
+			const categoryID = mockRecipes.categoryID;
 			const countryID = mockRecipes.countryID;
 			const regionID = mockRecipes.regionID;
 
@@ -183,14 +183,14 @@ describe("POST /add/:recipeName/:recipeDescription/:recipeDifficultyRating/:reci
 		});
 
 		it("should return 400 if passed a string for the serving number", async () => {
-			const recipeName = mockRecipes.RecipeName;
-			const recipeDescription = mockRecipes.RecipeDecsription;
-			const recipeDifficultyRating = mockRecipes.RecipeDifficultyRating;
-			const recipePrepTime = mockRecipes.RecipePrepTime;
-			const recipeCookTime = mockRecipes.RecipeCookTime;
+			const recipeName = mockRecipes.recipeName;
+			const recipeDescription = mockRecipes.recipeDescription;
+			const recipeDifficultyRating = mockRecipes.recipeDifficultyRating;
+			const recipePrepTime = mockRecipes.recipePrepTime;
+			const recipeCookTime = mockRecipes.recipeCookTime;
 			const servingNumber = "Hello";
-			const recipeSource = mockRecipes.RecipeSource;
-			const categoryID = mockRecipes.catagoryID;
+			const recipeSource = mockRecipes.recipeSource;
+			const categoryID = mockRecipes.categoryID;
 			const countryID = mockRecipes.countryID;
 			const regionID = mockRecipes.regionID;
 

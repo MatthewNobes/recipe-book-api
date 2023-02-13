@@ -1,18 +1,18 @@
 import { getAllIngredients } from "./getAllIngredients";
 import { prismaMock } from "../../../singleton";
-import { Ingredients } from "@prisma/client";
+import { ingredients } from "@prisma/client";
 
 describe("getAllIngredients", () => {
-	const mockIngredientsData: Ingredients[] = [
+	const mockIngredientsData: ingredients[] = [
 		{
 			ingredientID: 1,
-			ingredientName: "Test 1",
+			ingredient: "Test 1",
 			ingredientDescription: "Test Description 1",
 			ingredientInfoURL: "www.google.com",
 		},
 		{
 			ingredientID: 2,
-			ingredientName: "Test 2",
+			ingredient: "Test 2",
 			ingredientDescription: "Test Description 2",
 			ingredientInfoURL: "www.google.com",
 		},

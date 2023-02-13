@@ -1,7 +1,7 @@
 import express from "express";
 import { getAllMeasurementTypes, addNewMeasurementType } from "./";
 
-let router = express.Router();
+const router = express.Router();
 
 /**
  * @swagger

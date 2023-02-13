@@ -1,5 +1,5 @@
 import prisma from "../../../client";
-import { RecipeSteps } from "@prisma/client";
+import { recipeSteps } from "@prisma/client";
 
 /**
  * Gets a full method for a recipe, from its recipe ID.
@@ -8,7 +8,7 @@ import { RecipeSteps } from "@prisma/client";
  */
 export const getMethodFromRecipeID = async (
 	requestedRecipeID: number,
-): Promise<RecipeSteps[] | undefined> => {
+): Promise<recipeSteps[] | undefined> => {
 	const recipeSteps = await prisma.recipeSteps.findMany({
 		where: { recipeID: requestedRecipeID },
 	});
