@@ -1,4 +1,9 @@
-# recipe-book-api [![CI](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/ci.yml/badge.svg)](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/ci.yml)&nbsp;[![Docker Image CI](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/docker-image.yml/badge.svg)](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/docker-image.yml)&nbsp;[![ESLint](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/eslint.yml/badge.svg)](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/eslint.yml)&nbsp;[![CodeQL](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/codeql.yml/badge.svg)](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/codeql.yml)
+# DEPRECATED 
+
+The API has been merged with the front end app. See [here](https://github.com/MatthewNobes/recipe-book)
+
+
+[![CI](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/ci.yml/badge.svg)](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/ci.yml)&nbsp;[![Docker Image CI](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/docker-image.yml/badge.svg)](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/docker-image.yml)&nbsp;[![ESLint](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/eslint.yml/badge.svg)](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/eslint.yml)&nbsp;[![CodeQL](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/codeql.yml/badge.svg)](https://github.com/MatthewNobes/recipe-book-api/actions/workflows/codeql.yml)
 
 The api middleware for the recipe book app I have been developing. It serves
 data from my local recipe book SQL Server database to the front end app I been
